@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Play() {
-    return (
-        <div>Play</div>
-    )
+  return <div>Play</div>;
 }
 
 export default Play;
