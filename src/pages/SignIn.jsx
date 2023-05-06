@@ -63,16 +63,16 @@ const LoginBtn = styled.button`
   width: 100%;
   height: 30px;
   margin-bottom: 20px;
-  background-color: gray;
-  border: 3px solid gray;
-  color: white;
+  background-color: #b9d7ea;
+  border: 3px solid #b9d7ea;
+  color: black;
 `;
 
 const AddBtn = styled.button`
   width: 100%;
   height: 30px;
   margin-bottom: 20px;
-  background-color: #699aea;
-  border: 3px solid #699aea;
+  background-color: #769fcd;
+  border: 3px solid #769fcd;
   color: white;
 `;
