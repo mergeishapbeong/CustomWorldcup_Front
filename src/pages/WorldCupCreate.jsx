@@ -1,19 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Button from "../components/Button";
+import { addWorldCupAPI } from "../axios";
 
-function WorldCupCreate() {
+const WorldCupCreate = () => {
+  // 여기에 필요한 함수나 변수를 선언하는 공간
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [choice_name, setChoice_Name] = useState("");
+  const [choice_url, setChoice_Url] = useState("");
+
+  // 이미지 저장소
+  const [files, setFiles] = useState([]);
+
+  // validation 함수
+
+  // 월드컵 제목
+  const handleChange_title = (e) => {
+    setTitle(e.target.value);
+  };
+
+  // 월드컵 설명
+  const handleChange_content = (e) => {
+    setContent(e.target.value);
+  };
+
+  // 이미지 제목
+  const handleChange_choicename = (e) => {
+    setChoice_Name(e.target.value);
+  };
+
+  // 이미지 url
+  const handleChange_choiceurl = (e) => {
+    setChoice_Url(e.target.value);
+  };
+
+  // 이미지 추가 버튼
+  const clickAddButtonHandler = (e) => {
+    e.preventDefault();
+
+    const newimg = {
+      choice_name,
+      choice_url,
+    };
+    console.log("newimg :: ", newimg);
+
+    setFiles([...files, newimg]);
+    setFiles(files.concat(newimg));
+    console.log("files ::", files);
+
+    setChoice_Name("");
+    setChoice_Url("");
+  };
+
+  // 저장 버튼
+  const worldCupAddHandler = (e) => {
+    e.preventDefault();
+    console.log(title);
+    console.log(content);
+    console.log(choice_name);
+    console.log(choice_url);
+
+    const worldCup = {
+      title,
+      content,
+      choices: files,
+    };
+
+    addWorldCupAPI("/api/worldcup", worldCup)
+      .then(console.log("SUCESS"))
+      .catch((e) => console.log("e :: ", e));
+  };
+
+  console.log("files 11", files);
+
   return (
     <Container>
       <ContentDiv>
         <PageNameDiv>
           <PageNameHTag>이상형 월드컵 기본정보</PageNameHTag>
         </PageNameDiv>
-        <InputDiv>
-          <form>
+        <form>
+          <InputDiv>
             <InputBox>
               <InputLabel>제목</InputLabel>
               <InputText>
-                <Input />
+                <Input type="text" onChange={handleChange_title} />
                 <InputSpan>
                   이상형 월드컵의 제목을 입력하세요. 예) 고양이 월드컵, 강아지
                   월드컵
@@ -22,50 +94,75 @@ function WorldCupCreate() {
             </InputBox>
             <GapDiv></GapDiv>
             <InputBox>
-              <InputLabel>제목</InputLabel>
+              <InputLabel>내용</InputLabel>
               <InputText>
-                <Input />
+                <Input type="text" onChange={handleChange_content} />
                 <InputSpan>설명, 하고싶은 말 등을 자유롭게 쓰세요.</InputSpan>
               </InputText>
             </InputBox>
-          </form>
-        </InputDiv>
-        <ImgContent>
-          <ImgBox>
-            <ImgDiv>
-              <PageNameDiv>
-                <PageNameHTag>이상형 월드컵 이미지 업로드</PageNameHTag>
-              </PageNameDiv>
-              <ImgInputDiv>
-                <InputImgBox>
-                  <InputLabel>이미지 제목</InputLabel>
-                  <InputText>
-                    <Input />
-                    <InputSpan>이미지 제목을 입력하세요.</InputSpan>
-                  </InputText>
-                </InputImgBox>
-                <ImgFormContent>
-                  <ImgForm>
-                    <ImgFormText>
-                      <span>
-                        <strong>
-                          Drop files here or click to upload.
-                          <br />
-                          여기 파일을 놓거나 클릭하여 업로드하세요.
-                        </strong>
-                      </span>
-                    </ImgFormText>
-                  </ImgForm>
-                </ImgFormContent>
-              </ImgInputDiv>
-            </ImgDiv>
-          </ImgBox>
-        </ImgContent>
-        <StoreBtn>저장하기</StoreBtn>
+          </InputDiv>
+          <ImgContent>
+            <ImgBox>
+              <ImgDiv>
+                <PageNameDiv>
+                  <PageNameHTag>이상형 월드컵 이미지 업로드</PageNameHTag>
+                </PageNameDiv>
+                <ImgInputDiv>
+                  <InputImgBox>
+                    <InputLabel>이미지 제목</InputLabel>
+                    <InputText>
+                      <Input
+                        type="text"
+                        value={choice_name}
+                        onChange={handleChange_choicename}
+                      />
+                      <InputSpan>이미지 제목을 입력하세요.</InputSpan>
+                    </InputText>
+                  </InputImgBox>
+                  <InputImgBox>
+                    <InputLabel>이미지 url</InputLabel>
+                    <InputText>
+                      <Input
+                        type="text"
+                        value={choice_url}
+                        onChange={handleChange_choiceurl}
+                      />
+                      <InputSpan>이미지 url을 입력하세요.</InputSpan>
+                    </InputText>
+                  </InputImgBox>
+                  dd
+                  {files.map((d) => {
+                    <p>{d.choice_name}</p>;
+                  })}
+                  <Button clickAddButtonHandler={clickAddButtonHandler}>
+                    추가
+                  </Button>
+                  <div></div>
+                  {/* TODO 추후에 파일선택으로 변경 예정 
+                  <ImgFormContent>
+                    <ImgForm>
+                      <ImgFormText>
+                        <input type="file" />
+                        <span>
+                          <strong>
+                            Drop files here or click to upload.
+                            <br />
+                            여기 파일을 놓거나 클릭하여 업로드하세요.
+                          </strong>
+                        </span>
+                      </ImgFormText>
+                    </ImgForm>
+                  </ImgFormContent> */}
+                </ImgInputDiv>
+              </ImgDiv>
+            </ImgBox>
+          </ImgContent>
+          <StoreBtn onClick={worldCupAddHandler}>저장하기</StoreBtn>
+        </form>
       </ContentDiv>
     </Container>
   );
-}
+};
 
 export default WorldCupCreate;
 
@@ -191,6 +288,7 @@ const ImgDiv = styled.div`
 `;
 
 const ImgInputDiv = styled.div`
+  height: 200px;
   background-color: #fff;
   color: inherit;
   padding: 15px 20px 20px;
@@ -211,7 +309,7 @@ const ImgFormContent = styled.div`
   border-width: 1px 0;
 `;
 
-const ImgForm = styled.form`
+const ImgForm = styled.div`
   min-height: 150px;
   border: 2px solid rgba(0, 0, 0, 0.3);
   background: #fff;

@@ -11,8 +11,8 @@ function Mypage() {
         <ContentBox>
           <Content>
             <ContentImg>
-              <ImgDiv></ImgDiv>
-              <ImgDiv></ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
@@ -20,8 +20,8 @@ function Mypage() {
           </Content>
           <Content>
             <ContentImg>
-              <ImgDiv></ImgDiv>
-              <ImgDiv></ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
@@ -29,8 +29,8 @@ function Mypage() {
           </Content>
           <Content>
             <ContentImg>
-              <ImgDiv></ImgDiv>
-              <ImgDiv></ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
@@ -38,8 +38,8 @@ function Mypage() {
           </Content>
           <Content>
             <ContentImg>
-              <ImgDiv></ImgDiv>
-              <ImgDiv></ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
@@ -47,8 +47,8 @@ function Mypage() {
           </Content>
           <Content>
             <ContentImg>
-              <ImgDiv></ImgDiv>
-              <ImgDiv></ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
+              <ImgDiv>이미지</ImgDiv>
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
@@ -123,6 +123,7 @@ const ContentImg = styled.div`
 `;
 
 const ImgDiv = styled.div`
+  text-align: left;
   width: 50%;
   height: 130px;
   background: #769fcd;

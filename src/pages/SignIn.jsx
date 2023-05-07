@@ -1,7 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { postAPI } from "../axios";
+import Input from "../components/Input";
 
-function SignIn() {
+const SignIn = () => {
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleNickname = (e) => {
+    setNickname(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const signInHandler = (e) => {
+    e.preventDefault();
+    const user = {
+      nickname,
+      password,
+    };
+
+    postAPI("/api/auth/login", user)
+      .then((data) => {
+        console.log("data :: ", data);
+        console.log("data.data.Authorization :: ", data.data.Authorization);
+        sessionStorage.setItem("token", data.data.Authorization);
+      })
+      .catch((e) => console.log("e :: ", e));
+  };
+
   return (
     <Container>
       <TextDiv>
@@ -10,17 +39,23 @@ function SignIn() {
       </TextDiv>
       <form>
         <FormDiv>
-          <UserID></UserID>
-          <UserPW></UserPW>
+          <Input
+            placeholder={"아이디"}
+            clickAddInputHandler={handleNickname}
+          ></Input>
+          <Input
+            placeholder={"비밀번호"}
+            clickAddInputHandler={handlePassword}
+          ></Input>
         </FormDiv>
         <FormBtnDiv>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn onClick={signInHandler}>로그인</LoginBtn>
           <AddBtn>계정 생성</AddBtn>
         </FormBtnDiv>
       </form>
     </Container>
   );
-}
+};
 
 export default SignIn;
 
@@ -40,20 +75,6 @@ const FormDiv = styled.div`
   margin: auto;
 `;
 
-const UserID = styled.input.attrs({ placeholder: "아이디" })`
-  height: 35px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-`;
-
-const UserPW = styled.input.attrs({ placeholder: "비밀번호" })`
-  height: 35px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-`;
-
 const FormBtnDiv = styled.div`
   width: 300px;
   margin: auto;
@@ -65,7 +86,7 @@ const LoginBtn = styled.button`
   margin-bottom: 20px;
   background-color: #b9d7ea;
   border: 3px solid #b9d7ea;
-  color: black;
+  color: white;
 `;
 
 const AddBtn = styled.button`
