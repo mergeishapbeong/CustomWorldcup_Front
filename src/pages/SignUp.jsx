@@ -1,7 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { postAPI } from "../axios";
+import Input from "../components/Input";
 
-function SignUp() {
+const SignUp = () => {
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const validation = () => {
+    let regExp =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    if (nickname === "") {
+      alert("아이디를 입력해주세요.");
+      return false;
+    }
+    if (password === "") {
+      alert("비밀번호를 입력해주세요.");
+      return false;
+    }
+    if (email === "") {
+      alert("이메일을 입력해주세요.");
+      return false;
+    }
+    if (!regExp.test(email)) {
+      alert("이메일 형식으로 입력해주세요.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleNickname = (e) => {
+    setNickname(e.target.value);
+    console.log(nickname);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    console.log(password);
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    console.log(email);
+  };
+
+  const signUpHandler = (e) => {
+    e.preventDefault();
+    const user = {
+      nickname,
+      password,
+      email,
+    };
+
+    if (validation()) {
+      postAPI("/api/auth/signup", user)
+        .then((data) => {
+          console.log("data :", data);
+          alert("회원가입이 완료되었습니다.");
+          document.location.href = "/signin";
+        })
+        .catch((e) => console.log("e :: ", e));
+    }
+  };
+
   return (
     <Container>
       <TextDiv>
@@ -10,11 +74,21 @@ function SignUp() {
       </TextDiv>
       <form>
         <FormDiv>
-          <UserID></UserID>
-          <UserPW></UserPW>
+          <Input
+            placeholder={"아이디"}
+            clickAddInputHandler={handleNickname}
+          ></Input>
+          <Input
+            placeholder={"비밀번호"}
+            clickAddInputHandler={handlePassword}
+          ></Input>
+          <Input
+            placeholder={"이메일"}
+            clickAddInputHandler={handleEmail}
+          ></Input>
         </FormDiv>
         <FormBtnDiv>
-          <AddBtn>계정 생성</AddBtn>
+          <AddBtn onClick={signUpHandler}>계정 생성</AddBtn>
           <BtnPTag>
             <small>이미 계정이 있으신가요?</small>
           </BtnPTag>
@@ -23,7 +97,7 @@ function SignUp() {
       </form>
     </Container>
   );
-}
+};
 
 export default SignUp;
 
@@ -41,20 +115,6 @@ const TextDiv = styled.div`
 const FormDiv = styled.div`
   width: 300px;
   margin: auto;
-`;
-
-const UserID = styled.input.attrs({ placeholder: "아이디" })`
-  height: 35px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-`;
-
-const UserPW = styled.input.attrs({ placeholder: "비밀번호" })`
-  height: 35px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
 `;
 
 const FormBtnDiv = styled.div`
