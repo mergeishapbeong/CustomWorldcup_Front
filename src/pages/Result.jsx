@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // useState를 가져옵니다.
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Result = () => {

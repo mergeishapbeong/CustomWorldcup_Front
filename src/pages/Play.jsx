@@ -1,55 +1,53 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 
-const Play = ({ worldCupName, totalRounds }) => {
+const API_URL = 'http://13.125.1.214/api';
+
+const Play = () => {
+  const [worldCup, setWorldCup] = useState(null);
+  const [round, setRound] = useState(0);
   const navigate = useNavigate();
+  const { id: worldCupId } = useParams();
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const images = [
-    { id: 1, src: 'https://example.com/image1.jpg', name: 'Image 1' },
-    { id: 2, src: 'https://example.com/image2.jpg', name: 'Image 2' },
-  ];
+  useEffect(() => {
+    const fetchWorldCup = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/worldcups/${worldCupId}`);
+        setWorldCup(response.data);
+      } catch (error) {
+        console.error('Failed to fetch world cup:', error);
+      }
+    };
 
-  const [round, setRound] = useState(1);
-  const [roundImages, setRoundImages] = useState(images);
+    fetchWorldCup();
+  }, [worldCupId]);
 
   const handleImageClick = (image) => {
-    setSelectedImage(image);
-    if (round === totalRounds) {
-      goToResult(); // 모든 라운드가 끝난 경우 결과 페이지로 이동
-    }
-
-    setRound((prevRound) => prevRound + 1);
-
-    setRoundImages((prevRoundImages) => {
-      const newImages = prevRoundImages.map((img) => ({
-        ...img,
-        src: img.src.replace(/(\d+)/, (match) => parseInt(match) + 1),
-      }));
-      return newImages;
-    });
+    // Implement your logic for handling image click and moving to the next round
   };
 
-  const goToResult = () => {
-    navigate('/result');
-  };
+  if (!worldCup) {
+    return <div>Loading...</div>;
+  }
+
+  // 월드컵의 이미지 목록에서 현재 라운드에 해당하는 이미지를 가져옵니다.
+  const roundImages = worldCup.images.slice(round * 2, round * 2 + 2);
 
   return (
     <Container>
-      <ProgressInfo>
-        <h1>{worldCupName}</h1>
-        <p>{`진행 사항: ${round}/${totalRounds}`}</p>
-      </ProgressInfo>
+      <h1>{worldCup.title}</h1>
+      <ProgressInfo>Round {round + 1} / {Math.ceil(worldCup.images.length / 2)}</ProgressInfo>
       <ImageContainer>
-        {roundImages.map((image) => (
+        {roundImages.map((image, index) => (
           <ClickableImage
-            key={image.id}
-            src={image.src}
-            alt={image.name}
+            key={index}
+            src={image}
+            alt={`round-${round}-image-${index}`}
             onClick={() => handleImageClick(image)}
           >
-            <ImageName>{image.name}</ImageName>
+            <ImageName>{`round-${round}-image-${index}`}</ImageName>
           </ClickableImage>
         ))}
       </ImageContainer>
