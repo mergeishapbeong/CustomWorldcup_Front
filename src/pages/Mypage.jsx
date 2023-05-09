@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 function Mypage() {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <TextDiv>
@@ -16,7 +19,13 @@ function Mypage() {
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
-            <ContentBtn>수정하기</ContentBtn>
+            <ContentBtn
+              onClick={() => {
+                navigate("/worldcupcreate");
+              }}
+            >
+              수정하기
+            </ContentBtn>
           </Content>
           <Content>
             <ContentImg>
@@ -25,7 +34,13 @@ function Mypage() {
             </ContentImg>
             <ContentName>제목</ContentName>
             <ContentText>내용</ContentText>
-            <ContentBtn>수정하기</ContentBtn>
+            <ContentBtn
+              onClick={() => {
+                navigate("/worldcupcreate");
+              }}
+            >
+              수정하기
+            </ContentBtn>
           </Content>
           <Content>
             <ContentImg>

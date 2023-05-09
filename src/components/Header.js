@@ -1,30 +1,90 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+
+  const logoutHandler = () => {
+    sessionStorage.removeItem("token");
+    navigate("/main");
+  };
+
+  const loginCheck = (type) => {
+    if (token == null) {
+      alert("로그인을 해주세요.");
+      navigate("/signin");
+    } else {
+      navigate(type);
+    }
+  };
+
   return (
     <HeaderContainer>
       <NavBar>
         <LogoDiv>
-          <LogoATag>SWSchool</LogoATag>
+          <LogoATag
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            SWSchool
+          </LogoATag>
         </LogoDiv>
         <IconDiv>
-          <LinkUl>
+          <TopLinkUl>
             <LinkLi>
-              <LinkATag>이상형 월드컵</LinkATag>
+              <LinkATag
+                onClick={() => {
+                  navigate("/main");
+                }}
+              >
+                이상형 월드컵
+              </LinkATag>
             </LinkLi>
             <LinkLi>
-              <LinkATag>이상형 월드컵 만들기</LinkATag>
+              <LinkATag
+                onClick={() => {
+                  loginCheck("/worldcupcreate");
+                }}
+              >
+                이상형 월드컵 만들기
+              </LinkATag>
             </LinkLi>
             <LinkLi>
-              <LinkATag>내가 만든 월드컵</LinkATag>
+              <LinkATag
+                onClick={() => {
+                  loginCheck("/mypage");
+                }}
+              >
+                내가 만든 월드컵
+              </LinkATag>
             </LinkLi>
-          </LinkUl>
-          <LoginUl>
-            <LoginLi>
-              <LoginATag>Login</LoginATag>
-            </LoginLi>
-          </LoginUl>
+          </TopLinkUl>
+          {token == null ? (
+            <div>
+              <LoginUl>
+                <LoginLi>
+                  <LoginATag
+                    onClick={() => {
+                      navigate("/signin");
+                    }}
+                  >
+                    Login
+                  </LoginATag>
+                </LoginLi>
+              </LoginUl>
+            </div>
+          ) : (
+            <div>
+              <LoginUl>
+                <LoginLi>
+                  <LoginATag onClick={logoutHandler}>Logout</LoginATag>
+                </LoginLi>
+              </LoginUl>
+            </div>
+          )}
         </IconDiv>
       </NavBar>
     </HeaderContainer>
@@ -40,6 +100,7 @@ const HeaderContainer = styled.div`
 
 const NavBar = styled.nav`
   background: #d6e6f2;
+  width: 100%;
 `;
 
 const LogoDiv = styled.div`
@@ -59,6 +120,14 @@ const LogoATag = styled.a`
 const IconDiv = styled.div`
   display: flex;
   margin: 0;
+`;
+
+const TopLinkUl = styled.ul`
+  width: 93%;
+  padding-left: 0;
+  float: left;
+  margin: 0;
+  list-style: none;
 `;
 
 const LinkUl = styled.ul`
@@ -91,7 +160,6 @@ const LoginUl = styled.ul`
   float: left;
   margin: 0;
   list-style: none;
-  margin-left: 780px;
 `;
 
 const LoginLi = styled.li`

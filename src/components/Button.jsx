@@ -1,11 +1,15 @@
 const formbarButton = {
-  backgroundColor: "beige",
-  border: "none",
-  borderRadius: "10px",
-  color: "black",
-  fontWeight: "700",
-  height: "40px",
-  width: "140px",
+  border_color: "#769fcd",
+  color: "white",
+  display: "inline-block",
+  padding: "6px 12px",
+  font_size: "14px",
+  font_weight: "400",
+  cursor: "pointer",
+  float: "right",
+  background: "#769fcd",
+  border: "3px solid #769fcd",
+  borderRadius: "3px",
 };
 
 const Button = ({ clickAddButtonHandler, children }) => {
