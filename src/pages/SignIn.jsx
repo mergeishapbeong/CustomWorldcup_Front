@@ -30,6 +30,7 @@ const SignIn = () => {
         console.log("data :: ", data);
         console.log("data.data.Authorization :: ", data.data.Authorization);
         sessionStorage.setItem("token", data.data.Authorization);
+        sessionStorage.setItem("refreshToken", data.data.refreshToken);
         alert("로그인이 완료되었습니다.");
         document.location.href = "/";
       })

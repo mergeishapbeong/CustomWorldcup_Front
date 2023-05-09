@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getAPI } from "../axios";
 
 function Mypage() {
   const navigate = useNavigate();
+  const [worldcupList, setWorldCupList] = useState([]);
+
+  useEffect(() => {
+    getAPI("/api/mypage/worldcup").then((data) => {
+      console.log("data :: ", data.status);
+      if (data.status === 200) {
+        setWorldCupList(data.data.results);
+      }
+    });
+  }, []);
+
+  console.log("worldcupList :: ", worldcupList);
 
   return (
     <Container>
@@ -12,63 +25,25 @@ function Mypage() {
       </TextDiv>
       <ContentDiv>
         <ContentBox>
-          <Content>
-            <ContentImg>
-              <ImgDiv>이미지</ImgDiv>
-              <ImgDiv>이미지</ImgDiv>
-            </ContentImg>
-            <ContentName>제목</ContentName>
-            <ContentText>내용</ContentText>
-            <ContentBtn
-              onClick={() => {
-                navigate("/worldcupcreate");
-              }}
-            >
-              수정하기
-            </ContentBtn>
-          </Content>
-          <Content>
-            <ContentImg>
-              <ImgDiv>이미지</ImgDiv>
-              <ImgDiv>이미지</ImgDiv>
-            </ContentImg>
-            <ContentName>제목</ContentName>
-            <ContentText>내용</ContentText>
-            <ContentBtn
-              onClick={() => {
-                navigate("/worldcupcreate");
-              }}
-            >
-              수정하기
-            </ContentBtn>
-          </Content>
-          <Content>
-            <ContentImg>
-              <ImgDiv>이미지</ImgDiv>
-              <ImgDiv>이미지</ImgDiv>
-            </ContentImg>
-            <ContentName>제목</ContentName>
-            <ContentText>내용</ContentText>
-            <ContentBtn>수정하기</ContentBtn>
-          </Content>
-          <Content>
-            <ContentImg>
-              <ImgDiv>이미지</ImgDiv>
-              <ImgDiv>이미지</ImgDiv>
-            </ContentImg>
-            <ContentName>제목</ContentName>
-            <ContentText>내용</ContentText>
-            <ContentBtn>수정하기</ContentBtn>
-          </Content>
-          <Content>
-            <ContentImg>
-              <ImgDiv>이미지</ImgDiv>
-              <ImgDiv>이미지</ImgDiv>
-            </ContentImg>
-            <ContentName>제목</ContentName>
-            <ContentText>내용</ContentText>
-            <ContentBtn>수정하기</ContentBtn>
-          </Content>
+          {worldcupList.map((worldCut) => {
+            return (
+              <Content>
+                <ContentImg>
+                  <ImgDiv>이미지</ImgDiv>
+                  <ImgDiv>이미지</ImgDiv>
+                </ContentImg>
+                <ContentName>{worldCut.title}</ContentName>
+                <ContentText>{worldCut.content}</ContentText>
+                <ContentBtn
+                  onClick={() => {
+                    navigate("/worldcupcreate");
+                  }}
+                >
+                  수정하기
+                </ContentBtn>
+              </Content>
+            );
+          })}
         </ContentBox>
       </ContentDiv>
     </Container>

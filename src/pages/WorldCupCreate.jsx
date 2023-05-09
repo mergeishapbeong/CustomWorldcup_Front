@@ -10,6 +10,17 @@ const WorldCupCreate = () => {
   const [choice_name, setChoice_Name] = useState("");
   const [choice_url, setChoice_Url] = useState("");
 
+  // URL 검사
+  const validation = () => {
+    let urlExp =
+      /^(?:(?:https?|ftp):\/\/)?(?:[^:@]+(?::[^:@]+)?@)?(?:www\.)?[^:/?#\s]+(?:\.[^:/?#\s]+)*(?::\d+)?(?:[/?#]\S*)?$/i;
+
+    if (!urlExp.test(choice_url)) {
+      alert("올바른 URL을 입력하세요");
+      return false;
+    }
+  };
+
   // 이미지 저장소
   const [files, setFiles] = useState([]);
 
@@ -61,6 +72,7 @@ const WorldCupCreate = () => {
     console.log(content);
     console.log(choice_name);
     console.log(choice_url);
+    console.log(files);
 
     const worldCup = {
       title,
@@ -68,9 +80,11 @@ const WorldCupCreate = () => {
       choices: files,
     };
 
+    // if (validation()) {
     postAPI("/api/worldcup", worldCup)
       .then(console.log("SUCESS"))
       .catch((e) => console.log("e :: ", e));
+    // }
   };
 
   return (
