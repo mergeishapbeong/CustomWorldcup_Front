@@ -2,13 +2,21 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { postAPI } from "../axios";
 import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
 
   const validation = () => {
+    // 닉네임 검사 -> 영문 대/소문자, 숫자만 사용할 수 있고 길이는 최소 3, 최대 12로 정한다
+    let nickNameExp = /^[0-9a-zA-Z]{3,12}$/;
+    //  비밀번호 -> 영문 대/소문자, 숫자만 사용할 수 있고 길이는 최소 4, 최대 12로 정한다
+    let pwExp = /^[0-9a-zA-Z]{4,12}$/;
     let regExp =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
@@ -16,8 +24,26 @@ const SignUp = () => {
       alert("아이디를 입력해주세요.");
       return false;
     }
+    if (!nickNameExp.test(nickname)) {
+      alert("영문 대/소문자, 숫자로 4~12글자를 입력해주세요");
+      return false;
+    }
     if (password === "") {
       alert("비밀번호를 입력해주세요.");
+      return false;
+    }
+    if (!pwExp.test(password)) {
+      alert("영문 대/소문자, 숫자로 4~12글자를 입력해주세요");
+      return false;
+    }
+
+    if (confirmPassword === "") {
+      alert("비밀번호 재입력을 입력해주세요.");
+      return false;
+    }
+    // 비밀번호 재확인
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다");
       return false;
     }
     if (email === "") {
@@ -40,6 +66,11 @@ const SignUp = () => {
   const handlePassword = (e) => {
     setPassword(e.target.value);
     console.log(password);
+  };
+
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+    console.log(confirmPassword);
   };
 
   const handleEmail = (e) => {
@@ -75,14 +106,22 @@ const SignUp = () => {
       <form>
         <FormDiv>
           <Input
+            type={"text"}
             placeholder={"아이디"}
             clickAddInputHandler={handleNickname}
           ></Input>
           <Input
+            type={"password"}
             placeholder={"비밀번호"}
             clickAddInputHandler={handlePassword}
           ></Input>
           <Input
+            type={"password"}
+            placeholder={"비밀번호 재입력"}
+            clickAddInputHandler={handleConfirmPassword}
+          ></Input>
+          <Input
+            type={"text"}
             placeholder={"이메일"}
             clickAddInputHandler={handleEmail}
           ></Input>
@@ -92,7 +131,13 @@ const SignUp = () => {
           <BtnPTag>
             <small>이미 계정이 있으신가요?</small>
           </BtnPTag>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn
+            onClick={() => {
+              navigate("/signin");
+            }}
+          >
+            로그인
+          </LoginBtn>
         </FormBtnDiv>
       </form>
     </Container>

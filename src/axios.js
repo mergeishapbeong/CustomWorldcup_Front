@@ -25,12 +25,17 @@ export function postAPI(url, data) {
   return axios.post(API_BASE_URL + url, data);
 }
 
-/**
- * 월드컵 등록
- * @param {*} url
- * @param {*} worldcup
- */
-export function addWorldCupAPI(url, worldcup) {
-  console.log("addWorldCupAPI Start, url : ", url, " worldcup : ", worldcup);
-  return axios.post(API_BASE_URL + url, worldcup);
+export function putAPI(url, data) {
+  console.log("PUT Start, url : ", url, " user : ", data);
+  return axios.put(API_BASE_URL + url, data);
+}
+
+export function getAPI(url) {
+  console.log("GET Start, url : ", url);
+  return axios.get(API_BASE_URL + url);
+}
+
+export function deleteAPI(url) {
+  console.log("DELETE Start, url : ", url);
+  return axios.delete(API_BASE_URL + url);
 }

@@ -5,9 +5,10 @@ const inputCustom = {
   marginBottom: "15px",
 };
 
-const Input = ({ placeholder, clickAddInputHandler }) => {
+const Input = ({ type, placeholder, clickAddInputHandler }) => {
   return (
     <input
+      type={type}
       style={inputCustom}
       placeholder={placeholder}
       onChange={clickAddInputHandler}
