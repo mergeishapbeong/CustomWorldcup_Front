@@ -21,7 +21,7 @@ export const Router = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/mypage" element={<Mypage />} />
-          <Route path="/play/:id" element={<Play />} /> {/* 변경된 부분 */}
+          <Route path="/play/:id" element={<Play />} /> {/* 변경된 부분! */}
           <Route path="/result/:id" element={<Result />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

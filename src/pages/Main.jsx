@@ -7,7 +7,6 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// Add icons to the library
 library.add(solidHeart, regularHeart);
 
 const API_URL = 'http://13.125.1.214/api';

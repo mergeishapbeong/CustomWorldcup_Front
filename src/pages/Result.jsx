@@ -9,7 +9,6 @@ const Result = () => {
     { rank: 4, imageSrc: 'https://example.com/image4.jpg', name: 'Image 4', winCount: 3, totalCount: 20 },
   ];
 
-  // 댓글 관리를 위한 상태와 함수 추가
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 

@@ -32,7 +32,6 @@ const Play = () => {
     return <div>Loading...</div>;
   }
 
-  // 월드컵의 이미지 목록에서 현재 라운드에 해당하는 이미지를 가져옵니다.
   const roundImages = worldCup.images.slice(round * 2, round * 2 + 2);
 
   return (
