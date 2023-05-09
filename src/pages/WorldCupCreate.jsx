@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 // import React, { useState } from "react";
 // import styled from "styled-components";
 // import Button from "../components/Button";
 // import { addWorldCupAPI } from "../axios";
+=======
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "../components/Button";
+import { postAPI } from "../axios";
+>>>>>>> main
 
 // const WorldCupCreate = () => {
 //   // 여기에 필요한 함수나 변수를 선언하는 공간
@@ -10,8 +17,24 @@
 //   const [choice_name, setChoice_Name] = useState("");
 //   const [choice_url, setChoice_Url] = useState("");
 
+<<<<<<< HEAD
 //   // 이미지 저장소
 //   const [files, setFiles] = useState([]);
+=======
+  // URL 검사
+  const validation = () => {
+    let urlExp =
+      /^(?:(?:https?|ftp):\/\/)?(?:[^:@]+(?::[^:@]+)?@)?(?:www\.)?[^:/?#\s]+(?:\.[^:/?#\s]+)*(?::\d+)?(?:[/?#]\S*)?$/i;
+
+    if (!urlExp.test(choice_url)) {
+      alert("올바른 URL을 입력하세요");
+      return false;
+    }
+  };
+
+  // 이미지 저장소
+  const [files, setFiles] = useState([]);
+>>>>>>> main
 
 //   // validation 함수
 
@@ -39,6 +62,7 @@
 //   const clickAddButtonHandler = (e) => {
 //     e.preventDefault();
 
+<<<<<<< HEAD
 //     const newimg = {
 //       choice_name,
 //       choice_url,
@@ -48,11 +72,24 @@
 //     setFiles([...files, newimg]);
 //     setFiles(files.concat(newimg));
 //     console.log("files ::", files);
+=======
+    const newimg = {
+      choice_name,
+      choice_url,
+    };
+    // console.log("newimg :: ", newimg, files);
+
+    setFiles([...files, newimg]);
+    // setFiles(files.concat(newimg));
+
+    // console.log("files ::", files);
+>>>>>>> main
 
 //     setChoice_Name("");
 //     setChoice_Url("");
 //   };
 
+<<<<<<< HEAD
 //   // 저장 버튼
 //   const worldCupAddHandler = (e) => {
 //     e.preventDefault();
@@ -60,6 +97,16 @@
 //     console.log(content);
 //     console.log(choice_name);
 //     console.log(choice_url);
+=======
+  // 저장 버튼
+  const worldCupAddHandler = (e) => {
+    e.preventDefault();
+    console.log(title);
+    console.log(content);
+    console.log(choice_name);
+    console.log(choice_url);
+    console.log(files);
+>>>>>>> main
 
 //     const worldCup = {
 //       title,
@@ -67,6 +114,7 @@
 //       choices: files,
 //     };
 
+<<<<<<< HEAD
 //   //   addWorldCupAPI("/api/worldcup", worldCup)
 //   //     .then(console.log("SUCESS"))
 //   //     .catch((e) => console.log("e :: ", e));
@@ -163,6 +211,126 @@
 //     </Container>
 //   );
 // };
+=======
+    // if (validation()) {
+    postAPI("/api/worldcup", worldCup)
+      .then(console.log("SUCESS"))
+      .catch((e) => console.log("e :: ", e));
+    // }
+  };
+
+  return (
+    <Container>
+      <ContentDiv>
+        <PageNameDiv>
+          <PageNameHTag>이상형 월드컵 기본정보</PageNameHTag>
+        </PageNameDiv>
+        <form>
+          <InputDiv>
+            <InputBox>
+              <InputLabel>제목</InputLabel>
+              <InputText>
+                <Input type="text" onChange={handleChange_title} />
+                <InputSpan>
+                  이상형 월드컵의 제목을 입력하세요. 예) 고양이 월드컵, 강아지
+                  월드컵
+                </InputSpan>
+              </InputText>
+            </InputBox>
+            <GapDiv></GapDiv>
+            <InputBox>
+              <InputLabel>내용</InputLabel>
+              <InputText>
+                <Input type="text" onChange={handleChange_content} />
+                <InputSpan>설명, 하고싶은 말 등을 자유롭게 쓰세요.</InputSpan>
+              </InputText>
+            </InputBox>
+          </InputDiv>
+          <ImgContent>
+            <ImgBox>
+              <ImgDiv>
+                <PageNameDiv>
+                  <PageNameHTag>이상형 월드컵 이미지 업로드</PageNameHTag>
+                </PageNameDiv>
+                <ImgInputDiv>
+                  <InputImgBox>
+                    <InputLabel>이미지 제목</InputLabel>
+                    <InputText>
+                      <Input
+                        type="text"
+                        value={choice_name}
+                        onChange={handleChange_choicename}
+                      />
+                      <InputSpan>이미지 제목을 입력하세요.</InputSpan>
+                    </InputText>
+                  </InputImgBox>
+                  <InputImgBox>
+                    <InputLabel>이미지 url</InputLabel>
+                    <InputText>
+                      <Input
+                        type="text"
+                        value={choice_url}
+                        onChange={handleChange_choiceurl}
+                      />
+                      <InputSpan>이미지 url을 입력하세요.</InputSpan>
+                    </InputText>
+                  </InputImgBox>
+                  <InputImgBox>
+                    <InputLabels>이미지 저장</InputLabels>
+                    <ImgTextBox>
+                      <ImgStore>
+                        {files.map((d) => (
+                          <p style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            {d.choice_name}
+                          </p>
+                        ))}
+                      </ImgStore>
+                      <InputSpan>
+                        이미지 저장공간 (4장만 저장할 수 있습니다)
+                      </InputSpan>
+                      <Button clickAddButtonHandler={clickAddButtonHandler}>
+                        추가
+                      </Button>
+                    </ImgTextBox>
+                  </InputImgBox>
+
+                  {/* <ImgStore>
+                    이름 :
+                    {files.map((d) => (
+                      <p>{d.choice_name}</p>
+                    ))}
+                    <br />
+                    <Button clickAddButtonHandler={clickAddButtonHandler}>
+                      추가
+                    </Button>
+                  </ImgStore> */}
+
+                  {/* TODO 추후에 파일선택으로 변경 예정 
+                  <ImgFormContent>
+                    <ImgForm>
+                      <ImgFormText>
+                        <input type="file" />
+                        <span>
+                          <strong>
+                            Drop files here or click to upload.
+                            <br />
+                            여기 파일을 놓거나 클릭하여 업로드하세요.
+                          </strong>
+                        </span>
+                      </ImgFormText>
+                    </ImgForm>
+                  </ImgFormContent> */}
+                </ImgInputDiv>
+              </ImgDiv>
+            </ImgBox>
+          </ImgContent>
+          <StoreBtn onClick={worldCupAddHandler}>저장하기</StoreBtn>
+        </form>
+      </ContentDiv>
+    </Container>
+  );
+};
+>>>>>>> main
 
 // export default WorldCupCreate;
 
@@ -226,6 +394,7 @@
 //   width: 10%;
 // `;
 
+<<<<<<< HEAD
 // const InputText = styled.label`
 //   width: 90%;
 // `;
@@ -242,6 +411,36 @@
 //   width: 100%;
 //   font-size: 14px;
 // `;
+=======
+const InputLabels = styled.label`
+  margin-top: 15px;
+  padding-top: 9px;
+  margin-bottom: 0;
+  text-align: center;
+  width: 10%;
+`;
+
+const InputText = styled.label`
+  width: 90%;
+`;
+
+const ImgTextBox = styled.div`
+  width: 90%;
+`;
+
+const Input = styled.input`
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: block;
+  padding: 10px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+`;
+>>>>>>> main
 
 // const InputSpan = styled.span`
 //   display: block;
@@ -287,6 +486,7 @@
 //   padding: 0;
 // `;
 
+<<<<<<< HEAD
 // const ImgInputDiv = styled.div`
 //   height: 200px;
 //   background-color: #fff;
@@ -298,6 +498,19 @@
 //   border-width: 1px 0;
 //   clear: both;
 // `;
+=======
+const ImgInputDiv = styled.div`
+  height: 300px;
+  background-color: #fff;
+  color: inherit;
+  padding: 15px 20px 20px;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0;
+  clear: both;
+`;
+>>>>>>> main
 
 // const ImgFormContent = styled.div`
 //   background-color: #fff;
@@ -325,6 +538,7 @@
 //   margin-bottom: 50px;
 // `;
 
+<<<<<<< HEAD
 // const StoreBtn = styled.button`
 //   margin-top: 15px;
 //   margin-bottom: 5px;
@@ -342,3 +556,40 @@
 //   border: 1px solid transparent;
 //   float: right;
 // `;
+=======
+const StoreBtn = styled.button`
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-right: 20px;
+  background-color: #769fcd;
+  border-color: #769fcd;
+  color: #fff;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  cursor: pointer;
+  border: 1px solid transparent;
+  float: right;
+`;
+
+const ImgStore = styled.div`
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: flex;
+  padding: 10px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+  height: 45px;
+`;
+
+const ImgStoreDiv = styled.div`
+  margin-bottom: 15px;
+`;
+>>>>>>> main

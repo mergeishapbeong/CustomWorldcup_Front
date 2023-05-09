@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { postAPI } from "../axios";
 import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
 
@@ -27,8 +30,13 @@ const SignIn = () => {
         console.log("data :: ", data);
         console.log("data.data.Authorization :: ", data.data.Authorization);
         sessionStorage.setItem("token", data.data.Authorization);
+        sessionStorage.setItem("refreshToken", data.data.refreshToken);
+        alert("로그인이 완료되었습니다.");
+        document.location.href = "/";
       })
-      .catch((e) => console.log("e :: ", e));
+      .catch(() => {
+        alert("아이디와 비밀번호를 입력하세요");
+      });
   };
 
   return (
@@ -50,7 +58,13 @@ const SignIn = () => {
         </FormDiv>
         <FormBtnDiv>
           <LoginBtn onClick={signInHandler}>로그인</LoginBtn>
-          <AddBtn>계정 생성</AddBtn>
+          <AddBtn
+            onClick={() => {
+              navigate("/signup");
+            }}
+          >
+            계정 생성
+          </AddBtn>
         </FormBtnDiv>
       </form>
     </Container>

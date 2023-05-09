@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 // TODO 추후 서버 배포후 API 주소 변경 예정
 const API_BASE_URL = "http://localhost:3000";
 // const API_BASE_URL = "http://13.125.1.214";
+// const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://13.125.1.214";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 // axios.defaults.xsrfCookieName = "csrftoken";
@@ -61,4 +63,3 @@ export function deleteAPI(url) {
 // export function addWorldCupAPI(url, worldcup) {
 //   console.log("addWorldCupAPI Start, url : ", url, " worldcup : ", worldcup);
 //   return axios.post(API_BASE_URL + url, worldcup);
-// }
