@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
-import { addWorldCupAPI } from "../axios";
+import { postAPI } from "../axios";
 
 const WorldCupCreate = () => {
   // 여기에 필요한 함수나 변수를 선언하는 공간
@@ -9,6 +9,17 @@ const WorldCupCreate = () => {
   const [content, setContent] = useState("");
   const [choice_name, setChoice_Name] = useState("");
   const [choice_url, setChoice_Url] = useState("");
+
+  // URL 검사
+  const validation = () => {
+    let urlExp =
+      /^(?:(?:https?|ftp):\/\/)?(?:[^:@]+(?::[^:@]+)?@)?(?:www\.)?[^:/?#\s]+(?:\.[^:/?#\s]+)*(?::\d+)?(?:[/?#]\S*)?$/i;
+
+    if (!urlExp.test(choice_url)) {
+      alert("올바른 URL을 입력하세요");
+      return false;
+    }
+  };
 
   // 이미지 저장소
   const [files, setFiles] = useState([]);
@@ -43,11 +54,12 @@ const WorldCupCreate = () => {
       choice_name,
       choice_url,
     };
-    console.log("newimg :: ", newimg);
+    // console.log("newimg :: ", newimg, files);
 
     setFiles([...files, newimg]);
-    setFiles(files.concat(newimg));
-    console.log("files ::", files);
+    // setFiles(files.concat(newimg));
+
+    // console.log("files ::", files);
 
     setChoice_Name("");
     setChoice_Url("");
@@ -60,6 +72,7 @@ const WorldCupCreate = () => {
     console.log(content);
     console.log(choice_name);
     console.log(choice_url);
+    console.log(files);
 
     const worldCup = {
       title,
@@ -67,12 +80,12 @@ const WorldCupCreate = () => {
       choices: files,
     };
 
-    addWorldCupAPI("/api/worldcup", worldCup)
+    // if (validation()) {
+    postAPI("/api/worldcup", worldCup)
       .then(console.log("SUCESS"))
       .catch((e) => console.log("e :: ", e));
+    // }
   };
-
-  console.log("files 11", files);
 
   return (
     <Container>
@@ -130,14 +143,36 @@ const WorldCupCreate = () => {
                       <InputSpan>이미지 url을 입력하세요.</InputSpan>
                     </InputText>
                   </InputImgBox>
-                  dd
-                  {files.map((d) => {
-                    <p>{d.choice_name}</p>;
-                  })}
-                  <Button clickAddButtonHandler={clickAddButtonHandler}>
-                    추가
-                  </Button>
-                  <div></div>
+                  <InputImgBox>
+                    <InputLabels>이미지 저장</InputLabels>
+                    <ImgTextBox>
+                      <ImgStore>
+                        {files.map((d) => (
+                          <p style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            {d.choice_name}
+                          </p>
+                        ))}
+                      </ImgStore>
+                      <InputSpan>
+                        이미지 저장공간 (4장만 저장할 수 있습니다)
+                      </InputSpan>
+                      <Button clickAddButtonHandler={clickAddButtonHandler}>
+                        추가
+                      </Button>
+                    </ImgTextBox>
+                  </InputImgBox>
+
+                  {/* <ImgStore>
+                    이름 :
+                    {files.map((d) => (
+                      <p>{d.choice_name}</p>
+                    ))}
+                    <br />
+                    <Button clickAddButtonHandler={clickAddButtonHandler}>
+                      추가
+                    </Button>
+                  </ImgStore> */}
+
                   {/* TODO 추후에 파일선택으로 변경 예정 
                   <ImgFormContent>
                     <ImgForm>
@@ -226,7 +261,19 @@ const InputLabel = styled.label`
   width: 10%;
 `;
 
+const InputLabels = styled.label`
+  margin-top: 15px;
+  padding-top: 9px;
+  margin-bottom: 0;
+  text-align: center;
+  width: 10%;
+`;
+
 const InputText = styled.label`
+  width: 90%;
+`;
+
+const ImgTextBox = styled.div`
   width: 90%;
 `;
 
@@ -288,7 +335,7 @@ const ImgDiv = styled.div`
 `;
 
 const ImgInputDiv = styled.div`
-  height: 200px;
+  height: 300px;
   background-color: #fff;
   color: inherit;
   padding: 15px 20px 20px;
@@ -328,7 +375,7 @@ const ImgFormText = styled.div`
 const StoreBtn = styled.button`
   margin-top: 15px;
   margin-bottom: 5px;
-  margin-right: 5px;
+  margin-right: 20px;
   background-color: #769fcd;
   border-color: #769fcd;
   color: #fff;
@@ -341,4 +388,22 @@ const StoreBtn = styled.button`
   cursor: pointer;
   border: 1px solid transparent;
   float: right;
+`;
+
+const ImgStore = styled.div`
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: flex;
+  padding: 10px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+  height: 45px;
+`;
+
+const ImgStoreDiv = styled.div`
+  margin-bottom: 15px;
 `;
