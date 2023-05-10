@@ -35,7 +35,7 @@ const SignIn = () => {
         document.location.href = "/";
       })
       .catch(() => {
-        alert("아이디와 비밀번호를 입력하세요");
+        alert("아이디와 비밀번호를 다시 확인해주세요");
       });
   };
 
@@ -52,6 +52,7 @@ const SignIn = () => {
             clickAddInputHandler={handleNickname}
           ></Input>
           <Input
+            type={"password"}
             placeholder={"비밀번호"}
             clickAddInputHandler={handlePassword}
           ></Input>

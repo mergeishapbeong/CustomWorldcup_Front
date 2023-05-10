@@ -21,6 +21,7 @@ axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 axios.interceptors.request.use(
   (config) => {
+    // 서버에서 헤더에 token 과 refreshToken 을 가져오는 로직
     const token = sessionStorage.getItem("token");
     const refreshToken = sessionStorage.getItem("refreshToken");
     console.log(token);
