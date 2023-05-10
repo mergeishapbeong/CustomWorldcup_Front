@@ -1,42 +1,77 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+
+const API_BASE_URL = "http://13.125.1.214/api";
 
 const Result = () => {
-  const ranking = [
-    { rank: 1, imageSrc: 'https://example.com/image1.jpg', name: 'Image 1', winCount: 10, totalCount: 20 },
-    { rank: 2, imageSrc: 'https://example.com/image2.jpg', name: 'Image 2', winCount: 7, totalCount: 20 },
-    { rank: 3, imageSrc: 'https://example.com/image3.jpg', name: 'Image 3', winCount: 5, totalCount: 20 },
-    { rank: 4, imageSrc: 'https://example.com/image4.jpg', name: 'Image 4', winCount: 3, totalCount: 20 },
-  ];
+  const { id } = useParams();
+  const location = useLocation();
+  const [finalImage, setFinalImage] = useState(null);
+  const [ranking, setRanking] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const responseResult = await fetch(`${API_BASE_URL}/worldcups/${id}/result`);
+  
+      if (responseResult.ok) {
+        const resultData = await responseResult.json();
+        setFinalImage({ name: resultData.choice_name, url: resultData.choice_url });
+        // 다른 데이터를 사용하려면 상태를 추가하고 값을 설정해주세요.
+      } else {
+        console.error(
+          `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
+        );
+      }
+    };
+  
+    fetchData();
+  }, [id]);
 
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 여부를 확인하는 상태 (임시로 설정)
+  const userNickname = "사용자 닉네임"; // 로그인 한 사용자의 닉네임을 가져옵니다. 임시로 설정하였습니다.
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleCommentSubmit = (event) => {
     event.preventDefault();
-    setComments([...comments, newComment]);
-    setNewComment('');
+
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    setComments([...comments, { nickname: userNickname, comment: newComment }]);
+    setNewComment("");
   };
 
   return (
     <Container>
       <h1>결과</h1>
+      {finalImage && (
+        <FinalImageContainer>
+          <h2>최종 선택된 이미지</h2>
+          <FinalImage src={finalImage.url} alt={finalImage.name} />
+          <FinalImageName>{finalImage.name}</FinalImageName>
+        </FinalImageContainer>
+      )}
       <RankingContainer>
         {ranking.map((item) => (
           <RankingItem key={item.rank}>
             <Rank>{item.rank}</Rank>
-            <Image src={item.imageSrc} alt={item.name} />
+            <Image src={item.imageUrl} alt={item.name} />
             <Name>{item.name}</Name>
-            <WinCount>{`승리 횟수: ${item.winCount}`}</WinCount>
-            <TotalCount>{`총 선택 횟수: ${item.totalCount}`}</TotalCount>
+            <WinCount>{`1위 횟수: ${item.firstPlaceCount}`}</WinCount>
           </RankingItem>
         ))}
       </RankingContainer>
-      {/* 댓글 입력 및 댓글 목록 표시 부분 */}
       <CommentSection>
         <h3>댓글</h3>
         <CommentForm onSubmit={handleCommentSubmit}>
@@ -49,8 +84,11 @@ const Result = () => {
           <CommentButton type="submit">댓글 달기</CommentButton>
         </CommentForm>
         <CommentList>
-          {comments.map((comment, index) => (
-            <Comment key={index}>{comment}</Comment>
+          {comments.map((item, index) => (
+            <Comment key={index}>
+              <CommentNickname>{item.nickname}</CommentNickname>
+              <CommentText>{item.comment}</CommentText>
+            </Comment>
           ))}
         </CommentList>
       </CommentSection>
@@ -143,4 +181,32 @@ const Comment = styled.li`
   padding: 8px 16px;
   margin-bottom: 5px;
   border-radius: 4px;
+`;
+
+const CommentNickname = styled.span`
+  font-weight: bold;
+`;
+
+const CommentText = styled.span`
+  display: block;
+  margin-top: 4px;
+`;
+
+const FinalImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
+const FinalImage = styled.img`
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const FinalImageName = styled.h3`
+  margin-top: 1rem;
 `;

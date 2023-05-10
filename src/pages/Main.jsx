@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 library.add(solidHeart, regularHeart);
 
-const API_URL = 'http://13.125.1.214/api';
+const API_URL = "http://13.125.1.214/api";
 
 const Main = () => {
   const [worldCups, setWorldCups] = useState([]);
@@ -102,7 +102,7 @@ const WorldCupCard = ({ worldCup }) => {
         <Link to={`/play/${worldCup.worldcup_id}`}>
           <PlayButton>플레이</PlayButton>
         </Link>
-        <Link to={`/result/${worldCup.worldcup_id}`}>
+        <Link to={`/results/${worldCup.worldcup_id}`}>
           <ResultButton>결과 페이지</ResultButton>
         </Link>
         <Likes>
@@ -110,7 +110,7 @@ const WorldCupCard = ({ worldCup }) => {
             icon={liked ? solidHeart : regularHeart}
             onClick={() => handleLike(worldcup_id)}
           />
-          {likeCount} 좋아요
+          {likeCount} 
         </Likes>
       </ButtonContainer>
     </Card>
