@@ -23,12 +23,12 @@ axios.interceptors.request.use(
   (config) => {
     // 서버에서 헤더에 token 과 refreshToken 을 가져오는 로직
     const token = sessionStorage.getItem("token");
-    const refreshToken = sessionStorage.getItem("refreshToken");
+    const refreshtoken = sessionStorage.getItem("refreshtoken");
     console.log(token);
 
     if (token) {
       config.headers["Authorization"] = token.trim();
-      config.headers["refreshToken"] = refreshToken.trim();
+      config.headers["refreshtoken"] = refreshtoken.trim();
     }
 
     config.headers["Content-Type"] = "application/json";

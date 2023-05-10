@@ -54,13 +54,8 @@ const WorldCupCreate = () => {
         choice_name,
         choice_url,
       };
-      // console.log("newimg :: ", newimg, files);
 
       setFiles([...files, newimg]);
-      // setFiles(files.concat(newimg));
-
-      // console.log("files ::", files);
-
       setChoice_Name("");
       setChoice_Url("");
     }
@@ -69,11 +64,6 @@ const WorldCupCreate = () => {
   // 저장 버튼
   const worldCupAddHandler = (e) => {
     e.preventDefault();
-    console.log(title);
-    console.log(content);
-    console.log(choice_name);
-    console.log(choice_url);
-    console.log(files);
 
     const worldCup = {
       title,
@@ -157,9 +147,11 @@ const WorldCupCreate = () => {
                         {files.map((d, index) => (
                           <p
                             key={index}
-                            style={{ marginRight: "5px", marginLeft: "5px" }}
+                            style={{
+                              marginLeft: "10px",
+                            }}
                           >
-                            {d.choice_name}
+                            {d.choice_name},
                           </p>
                         ))}
                       </ImgStore>
@@ -171,17 +163,6 @@ const WorldCupCreate = () => {
                       </Button>
                     </ImgTextBox>
                   </InputImgBox>
-
-                  {/* <ImgStore>
-                    이름 :
-                    {files.map((d) => (
-                      <p>{d.choice_name}</p>
-                    ))}
-                    <br />
-                    <Button clickAddButtonHandler={clickAddButtonHandler}>
-                      추가
-                    </Button>
-                  </ImgStore> */}
 
                   {/* TODO 추후에 파일선택으로 변경 예정 
                   <ImgFormContent>
@@ -273,7 +254,6 @@ const InputLabel = styled.label`
 
 const InputLabels = styled.label`
   margin-top: 15px;
-  padding-top: 9px;
   margin-bottom: 0;
   text-align: center;
   width: 10%;
@@ -356,32 +336,6 @@ const ImgInputDiv = styled.div`
   clear: both;
 `;
 
-const ImgFormContent = styled.div`
-  background-color: #fff;
-  color: inherit;
-  padding: 15px 20px 20px;
-  border-color: #e7eaec;
-  border-image: none;
-  border-style: solid solid none;
-  border-width: 1px 0;
-`;
-
-const ImgForm = styled.div`
-  min-height: 150px;
-  border: 2px solid rgba(0, 0, 0, 0.3);
-  background: #fff;
-  padding: 20px;
-  cursor: pointer;
-`;
-
-const ImgFormText = styled.div`
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-`;
-
 const StoreBtn = styled.button`
   margin-top: 15px;
   margin-bottom: 5px;
@@ -407,13 +361,9 @@ const ImgStore = styled.div`
   border-radius: 1px;
   color: inherit;
   display: flex;
-  padding: 10px 12px;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  /* padding: 10px 12px; */
+  /* transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s; */
   width: 100%;
   font-size: 14px;
   height: 45px;
-`;
-
-const ImgStoreDiv = styled.div`
-  margin-bottom: 15px;
 `;
