@@ -27,10 +27,8 @@ const SignIn = () => {
 
     postAPI("/api/auth/login", user)
       .then((data) => {
-        console.log("data :: ", data);
-        console.log("data.data.Authorization :: ", data.data.Authorization);
         sessionStorage.setItem("token", data.data.Authorization);
-        sessionStorage.setItem("refreshToken", data.data.refreshToken);
+        sessionStorage.setItem("refreshtoken", data.data.refreshtoken);
         alert("로그인이 완료되었습니다.");
         document.location.href = "/";
       })
@@ -102,6 +100,11 @@ const LoginBtn = styled.button`
   background-color: #b9d7ea;
   border: 3px solid #b9d7ea;
   color: white;
+  &:hover {
+    background: #94aebf;
+    border: 3px solid #94aebf;
+    cursor: pointer;
+  }
 `;
 
 const AddBtn = styled.button`
@@ -111,4 +114,9 @@ const AddBtn = styled.button`
   background-color: #769fcd;
   border: 3px solid #769fcd;
   color: white;
+  &:hover {
+    background: #4c6684;
+    border: 3px solid #4c6684;
+    cursor: pointer;
+  }
 `;
