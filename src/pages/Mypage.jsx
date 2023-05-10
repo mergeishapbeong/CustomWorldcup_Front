@@ -17,6 +17,8 @@ function Mypage() {
     });
   }, []);
 
+  console.log("worldcupList ::", worldcupList);
+
   return (
     <Container>
       <TextDiv>

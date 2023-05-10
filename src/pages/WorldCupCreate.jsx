@@ -10,20 +10,20 @@ const WorldCupCreate = () => {
   const [choice_name, setChoice_Name] = useState("");
   const [choice_url, setChoice_Url] = useState("");
 
-  // URL 검사
+  // validation 함수
   const validation = () => {
     let urlExp =
-      /^(?:(?:https?|ftp):\/\/)?(?:[^:@]+(?::[^:@]+)?@)?(?:www\.)?[^:/?#\s]+(?:\.[^:/?#\s]+)*(?::\d+)?(?:[/?#]\S*)?$/i;
+      /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
     if (!urlExp.test(choice_url)) {
+      alert("올바른 URL을 입력하세요");
       return false;
     }
+    return true;
   };
 
   // 이미지 저장소
   const [files, setFiles] = useState([]);
-
-  // validation 함수
 
   // 월드컵 제목
   const handleChange_title = (e) => {
@@ -49,24 +49,21 @@ const WorldCupCreate = () => {
   const clickAddButtonHandler = (e) => {
     e.preventDefault();
 
-    if (validation) {
-      alert("올바른 URL을 입력하세요");
-      return false;
+    if (validation()) {
+      const newimg = {
+        choice_name,
+        choice_url,
+      };
+      // console.log("newimg :: ", newimg, files);
+
+      setFiles([...files, newimg]);
+      // setFiles(files.concat(newimg));
+
+      // console.log("files ::", files);
+
+      setChoice_Name("");
+      setChoice_Url("");
     }
-
-    const newimg = {
-      choice_name,
-      choice_url,
-    };
-    // console.log("newimg :: ", newimg, files);
-
-    setFiles([...files, newimg]);
-    // setFiles(files.concat(newimg));
-
-    // console.log("files ::", files);
-
-    setChoice_Name("");
-    setChoice_Url("");
   };
 
   // 저장 버튼
@@ -90,7 +87,10 @@ const WorldCupCreate = () => {
     }
 
     postAPI("/api/worldcup", worldCup)
-      .then(alert("이미지가 저장되었습니다"))
+      .then(() => {
+        alert("게시물이 생성되었습니다");
+        document.location.href = "/";
+      })
       .catch((e) => console.log("e :: ", e));
   };
 
@@ -154,8 +154,11 @@ const WorldCupCreate = () => {
                     <InputLabels>이미지 저장</InputLabels>
                     <ImgTextBox>
                       <ImgStore>
-                        {files.map((d) => (
-                          <p style={{ marginRight: "5px", marginLeft: "5px" }}>
+                        {files.map((d, index) => (
+                          <p
+                            key={index}
+                            style={{ marginRight: "5px", marginLeft: "5px" }}
+                          >
                             {d.choice_name}
                           </p>
                         ))}
