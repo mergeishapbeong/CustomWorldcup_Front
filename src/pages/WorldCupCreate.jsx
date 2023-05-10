@@ -16,7 +16,6 @@ const WorldCupCreate = () => {
       /^(?:(?:https?|ftp):\/\/)?(?:[^:@]+(?::[^:@]+)?@)?(?:www\.)?[^:/?#\s]+(?:\.[^:/?#\s]+)*(?::\d+)?(?:[/?#]\S*)?$/i;
 
     if (!urlExp.test(choice_url)) {
-      alert("올바른 URL을 입력하세요");
       return false;
     }
   };
@@ -50,6 +49,11 @@ const WorldCupCreate = () => {
   const clickAddButtonHandler = (e) => {
     e.preventDefault();
 
+    if (validation) {
+      alert("올바른 URL을 입력하세요");
+      return false;
+    }
+
     const newimg = {
       choice_name,
       choice_url,
@@ -80,11 +84,14 @@ const WorldCupCreate = () => {
       choices: files,
     };
 
-    // if (validation()) {
+    if (files.length < 2) {
+      alert("이미지를 2개 이상 저장해주세요");
+      return false;
+    }
+
     postAPI("/api/worldcup", worldCup)
-      .then(console.log("SUCESS"))
+      .then(alert("이미지가 저장되었습니다"))
       .catch((e) => console.log("e :: ", e));
-    // }
   };
 
   return (

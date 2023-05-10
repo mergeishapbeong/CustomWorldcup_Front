@@ -8,6 +8,7 @@ export const Header = () => {
 
   const logoutHandler = () => {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("refreshToken");
     navigate("/main");
   };
 

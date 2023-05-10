@@ -9,14 +9,13 @@ function Mypage() {
 
   useEffect(() => {
     getAPI("/api/mypage/worldcup").then((data) => {
-      console.log("data :: ", data.status);
+      // console.log("data :: ", data.status);
+      // console.log("data :: ", data.data.results[0].Worldcup_choices);
       if (data.status === 200) {
         setWorldCupList(data.data.results);
       }
     });
   }, []);
-
-  console.log("worldcupList :: ", worldcupList);
 
   return (
     <Container>
@@ -25,15 +24,18 @@ function Mypage() {
       </TextDiv>
       <ContentDiv>
         <ContentBox>
-          {worldcupList.map((worldCut) => {
+          {worldcupList.map((worldCup) => {
             return (
               <Content>
-                <ContentImg>
-                  <ImgDiv>이미지</ImgDiv>
-                  <ImgDiv>이미지</ImgDiv>
-                </ContentImg>
-                <ContentName>{worldCut.title}</ContentName>
-                <ContentText>{worldCut.content}</ContentText>
+                <ImgDiv>
+                  {worldCup.Worldcup_choices.map((w) => {
+                    return (
+                      <img src={w.choice_url} style={{ width: "50%" }}></img>
+                    );
+                  })}
+                </ImgDiv>
+                <ContentName>{worldCup.title}</ContentName>
+                <ContentText>{worldCup.content}</ContentText>
                 <ContentBtn
                   onClick={() => {
                     navigate("/worldcupcreate");
@@ -105,16 +107,10 @@ const ContentBtn = styled.button`
   }
 `;
 
-const ContentImg = styled.div`
-  width: 100%;
-  height: 130px;
-  background: white;
-  display: flex;
-`;
-
 const ImgDiv = styled.div`
   text-align: left;
-  width: 50%;
+  width: 100%;
   height: 130px;
   background: #769fcd;
+  display: flex;
 `;
