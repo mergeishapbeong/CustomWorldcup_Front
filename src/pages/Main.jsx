@@ -62,6 +62,7 @@ const WorldCupCard = ({ worldCup }) => {
   const toggleLike = async (worldCupId, liked) => {
     const token = sessionStorage.getItem("token");
     try {
+      setLiked(!liked);
       const response = await axios.put(
         `${API_URL}/worldcup/${worldCupId}/likes`,
         {
@@ -73,17 +74,15 @@ const WorldCupCard = ({ worldCup }) => {
           },
         }
       );
-      setLikeCount(response.data.likes);
+      setLiked(!liked);
+      setLikeCount(response.data.data.likes);
     } catch (error) {
       console.error("Failed to toggle like:", error);
     }
   };
 
-  const handleLike = (worldCupId) => {
-    setLiked((prevLiked) => {
-      toggleLike(worldCupId, prevLiked);
-      return !prevLiked;
-    });
+  const handleLike = async (worldCupId) => { // 변경된 부분
+    await toggleLike(worldCupId, liked); // 변경된 부분
   };
 
   if (!choices || choices.length < 2) {
@@ -122,7 +121,6 @@ const WorldCupCard = ({ worldCup }) => {
               style={{ marginRight: "0.5rem" }}
               onClick={() => handleLike(worldcup_id)}
             />
-            {likeCount}
           </Likes>
         </LikeWrapper>
       </ButtonContainer>

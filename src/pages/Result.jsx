@@ -46,20 +46,20 @@ const Result = () => {
             },
           }
         );
-        console.log(responseResult);
+        console.log("responseResult ::", responseResult);
 
         if (responseResult.status === 200) {
           const resultData = responseResult.data;
-          console.log("Result data: ", resultData);
+          console.log("Result data: ", resultData.worldcupResult);
           setFinalImage({
-            name: resultData.choice_name,
-            url: resultData.choice_url,
+            name: resultData.worldcupResult.choice_name,
+            url: resultData.worldcupResult.choice_url,
           });
-          const sortedResultData = resultData.result.sort(
-            (a, b) => b.win_count - a.win_count
-          );
-          setRanking(sortedResultData);
-          console.log("Sorted result data: ", sortedResultData);
+          // const sortedResultData = resultData.result.sort(
+          //   (a, b) => b.win_count - a.win_count
+          // );
+          // setRanking(sortedResultData);
+          // console.log("Sorted result data: ", sortedResultData);
         } else {
           console.error(
             `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
@@ -70,11 +70,11 @@ const Result = () => {
         console.error("Error fetching result: ", error);
       }
     };
-          // const rankingData = resultData.result.map((item) => ({
-          //   choice_url: item.choice_url,
-          //   choice_name: item.choice_name,
-          //   win_count: item.win_count,
-          // }));
+    // const rankingData = resultData.result.map((item) => ({
+    //   choice_url: item.choice_url,
+    //   choice_name: item.choice_name,
+    //   win_count: item.win_count,
+    // }));
 
     fetchData();
   }, [id, worldcup_choice_id]);
@@ -111,12 +111,13 @@ const Result = () => {
     console.log("ranking updated: ", ranking);
   }, [ranking]);
 
+  console.log("finalImage :: ", finalImage);
   return (
     <Container>
       <h1>결과</h1>
       {finalImage && (
         <FinalImageContainer>
-          <h2>최종 선택된 이미지</h2>
+          <h2>우승</h2>
           <FinalImage src={finalImage.url} alt={finalImage.name} />
           <FinalImageName>{finalImage.name}</FinalImageName>
         </FinalImageContainer>
@@ -145,7 +146,6 @@ const Result = () => {
         <CommentList>
           {comments.map((item, index) => (
             <Comment key={index}>
-              <CommentNickname>{item.nickname}</CommentNickname>
               <CommentText>{item.comment}</CommentText>
             </Comment>
           ))}
