@@ -8,6 +8,7 @@ import Result from "../pages/Result";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import WorldCupCreate from "../pages/WorldCupCreate";
+import WorldCupUpdate from "pages/WorldCupUpdate";
 
 export const Router = () => {
   return (
@@ -21,6 +22,7 @@ export const Router = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/worldcupcreate" element={<WorldCupCreate />} />
+          <Route path="/worldcupupdate/:id" element={<WorldCupUpdate />} />
         </Routes>
       </Layout>
     </BrowserRouter>

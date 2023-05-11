@@ -7,8 +7,8 @@ const formbarButton = {
   font_weight: "400",
   cursor: "pointer",
   float: "right",
-  background: "#769fcd",
-  border: "3px solid #769fcd",
+  background: "#769FCD",
+  border: "3px solid #769FCD",
   borderRadius: "3px",
 };
 
