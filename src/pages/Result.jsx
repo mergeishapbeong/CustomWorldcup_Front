@@ -1,37 +1,92 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const API_BASE_URL = "http://13.125.1.214/api";
 
 const Result = () => {
   const { id } = useParams();
   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const worldcup_choice_id = queryParams.get("worldcup_choice_id");
   const [finalImage, setFinalImage] = useState(null);
   const [ranking, setRanking] = useState([]);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
-      const responseResult = await fetch(`${API_BASE_URL}/worldcups/${id}/result`);
-  
-      if (responseResult.ok) {
-        const resultData = await responseResult.json();
-        setFinalImage({ name: resultData.choice_name, url: resultData.choice_url });
-        // 다른 데이터를 사용하려면 상태를 추가하고 값을 설정해주세요.
-      } else {
+      if (!worldcup_choice_id) {
         console.error(
-          `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
+          "worldcup_choice_id is not set in the URL query parameters."
         );
+        return;
+      }
+      const token = sessionStorage.getItem("token");
+      const refreshToken = sessionStorage.getItem("refreshToken");
+      console.log(worldcup_choice_id);
+
+      try {
+        const responseResult = await axios.get(
+          `${API_BASE_URL}/worldcup/${id}/result/${worldcup_choice_id}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+              refreshtoken: `${refreshToken}`,
+            },
+          }
+        );
+        console.log(responseResult);
+
+        if (responseResult.status === 200) {
+          const resultData = responseResult.data;
+          console.log("Result data: ", resultData);
+          setFinalImage({
+            name: resultData.choice_name,
+            url: resultData.choice_url,
+          });
+          const sortedResultData = resultData.result.sort(
+            (a, b) => b.win_count - a.win_count
+          );
+          setRanking(sortedResultData);
+          console.log("Sorted result data: ", sortedResultData);
+        } else {
+          console.error(
+            `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
+          );
+          console.error("Error fetching result: ", responseResult);
+        }
+      } catch (error) {
+        console.error("Error fetching result: ", error);
       }
     };
-  
+          // const rankingData = resultData.result.map((item) => ({
+          //   choice_url: item.choice_url,
+          //   choice_name: item.choice_name,
+          //   win_count: item.win_count,
+          // }));
+
     fetchData();
-  }, [id]);
+  }, [id, worldcup_choice_id]);
+
+  // useEffect(() => {
+  //   console.log("finalImage updated: ", finalImage);
+  //   console.log("ranking updated: ", ranking);
+  // }, [finalImage, ranking]);
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 여부를 확인하는 상태 (임시로 설정)
-  const userNickname = "사용자 닉네임"; // 로그인 한 사용자의 닉네임을 가져옵니다. 임시로 설정하였습니다.
+  const userNickname = "사용자 닉네임";
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
@@ -52,6 +107,10 @@ const Result = () => {
     setNewComment("");
   };
 
+  useEffect(() => {
+    console.log("ranking updated: ", ranking);
+  }, [ranking]);
+
   return (
     <Container>
       <h1>결과</h1>
@@ -63,12 +122,12 @@ const Result = () => {
         </FinalImageContainer>
       )}
       <RankingContainer>
-        {ranking.map((item) => (
-          <RankingItem key={item.rank}>
-            <Rank>{item.rank}</Rank>
-            <Image src={item.imageUrl} alt={item.name} />
-            <Name>{item.name}</Name>
-            <WinCount>{`1위 횟수: ${item.firstPlaceCount}`}</WinCount>
+        {ranking.map((item, index) => (
+          <RankingItem key={index}>
+            <Rank>{index + 1}</Rank>
+            <Image src={item.choice_url} alt={item.choice_name} />
+            <Name>{item.choice_name}</Name>
+            <WinCount>{`1위 횟수: ${item.win_count}`}</WinCount>
           </RankingItem>
         ))}
       </RankingContainer>
@@ -134,10 +193,6 @@ const Name = styled.span`
 `;
 
 const WinCount = styled.span`
-  font-size: 16px;
-`;
-
-const TotalCount = styled.span`
   font-size: 16px;
 `;
 
