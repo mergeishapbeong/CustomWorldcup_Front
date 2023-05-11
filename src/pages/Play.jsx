@@ -29,18 +29,21 @@ const Play = () => {
 
   const handleImageClick = (selectedImage) => {
     const currentRoundImages = getRoundImages(round);
-    
+
     if (round < 2) {
       setSelectedImages([...selectedImages, selectedImage]);
     }
-  
+
     if (round < 2) {
       setRound(round + 1);
     } else {
       setFinalImage(selectedImage);
       // 결과 페이지로 이동하기 전에 선택한 이미지의 worldcup_choice_id 값을 URL 쿼리 파라미터로 추가하세요.
       console.log(selectedImage);
-      navigate(`/results/${worldCupId}?worldcup_choice_id=${selectedImage.worldcup_choice_id}`, { state: { finalImage: selectedImage } }); // 변경된 부분!
+      navigate(
+        `/results/${worldCupId}?worldcup_choice_id=${selectedImage.worldcup_choice_id}`,
+        { state: { finalImage: selectedImage } }
+      ); // 변경된 부분!
     }
   };
 
@@ -66,9 +69,7 @@ const Play = () => {
     <Container>
       <h1>{worldCup.title}</h1>
       <ProgressInfo>
-        {worldCup.worldcup.choices
-          ? `${roundNames[round]}`
-          : "Loading..."}
+        {worldCup.worldcup.choices ? `${roundNames[round]}` : "Loading..."}
       </ProgressInfo>
       <ImageContainer>
         {roundImages.map((choice, index) => (
