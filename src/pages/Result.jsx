@@ -35,6 +35,7 @@ const Result = () => {
       const token = sessionStorage.getItem("token");
       const refreshToken = sessionStorage.getItem("refreshToken");
       console.log(worldcup_choice_id);
+      // console.log(worldcup_choice_id);
 
       try {
         const responseResult = await axios.get(
@@ -46,11 +47,19 @@ const Result = () => {
             },
           }
         );
+<<<<<<< HEAD
         console.log("responseResult ::", responseResult);
 
         if (responseResult.status === 200) {
           const resultData = responseResult.data;
           console.log("Result data: ", resultData.worldcupResult);
+=======
+        // console.log("responseResult ::", responseResult);
+
+        if (responseResult.status === 200) {
+          const resultData = responseResult.data;
+          // console.log("Result data: ", resultData.worldcupResult);
+>>>>>>> 7ed6b8bc06c7fc3870a17519bccf098417adb9f3
           setFinalImage({
             name: resultData.worldcupResult.choice_name,
             url: resultData.worldcupResult.choice_url,
@@ -60,6 +69,22 @@ const Result = () => {
           // );
           // setRanking(sortedResultData);
           // console.log("Sorted result data: ", sortedResultData);
+<<<<<<< HEAD
+=======
+
+          // 댓글 조회
+          const commentResponse = await axios.get(
+            `${API_BASE_URL}/worldcup/${id}/comments`,
+            {
+              headers: {
+                Authorization: `${token}`,
+                refreshtoken: `${refreshToken}`,
+              },
+            }
+          );
+
+          console.log("commentResponse :: ", commentResponse);
+>>>>>>> 7ed6b8bc06c7fc3870a17519bccf098417adb9f3
         } else {
           console.error(
             `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
@@ -87,6 +112,7 @@ const Result = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const userNickname = "사용자 닉네임";
+  const userNickname = "익명";
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
@@ -111,7 +137,12 @@ const Result = () => {
     console.log("ranking updated: ", ranking);
   }, [ranking]);
 
+<<<<<<< HEAD
   console.log("finalImage :: ", finalImage);
+=======
+  // console.log("finalImage :: ", finalImage);
+  // console.log("comments ::", comments);
+>>>>>>> 7ed6b8bc06c7fc3870a17519bccf098417adb9f3
   return (
     <Container>
       <h1>결과</h1>
