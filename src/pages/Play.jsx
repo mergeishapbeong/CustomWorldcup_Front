@@ -1,55 +1,84 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-const Play = ({ worldCupName, totalRounds }) => {
+const API_URL = "http://13.125.1.214/api";
+
+const Play = () => {
+  const [worldCup, setWorldCup] = useState(null);
+  const [round, setRound] = useState(0);
   const navigate = useNavigate();
+  const { id: worldCupId } = useParams();
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [finalImage, setFinalImage] = useState(null);
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const images = [
-    { id: 1, src: 'https://example.com/image1.jpg', name: 'Image 1' },
-    { id: 2, src: 'https://example.com/image2.jpg', name: 'Image 2' },
-  ];
+  useEffect(() => {
+    const fetchWorldCup = async () => {
+      try {
+        console.log(`${API_URL}/worldcup/${worldCupId}`);
+        const response = await axios.get(`${API_URL}/worldcup/${worldCupId}`);
+        setWorldCup(response.data);
+      } catch (error) {
+        console.error("Failed to fetch world cup:", error);
+      }
+    };
 
-  const [round, setRound] = useState(1);
-  const [roundImages, setRoundImages] = useState(images);
+    fetchWorldCup();
+  }, [worldCupId]);
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    if (round === totalRounds) {
-      goToResult(); // 모든 라운드가 끝난 경우 결과 페이지로 이동
+  const handleImageClick = (selectedImage) => {
+    const currentRoundImages = getRoundImages(round);
+    
+    if (round < 2) {
+      setSelectedImages([...selectedImages, selectedImage]);
     }
-
-    setRound((prevRound) => prevRound + 1);
-
-    setRoundImages((prevRoundImages) => {
-      const newImages = prevRoundImages.map((img) => ({
-        ...img,
-        src: img.src.replace(/(\d+)/, (match) => parseInt(match) + 1),
-      }));
-      return newImages;
-    });
+  
+    if (round < 2) {
+      setRound(round + 1);
+    } else {
+      setFinalImage(selectedImage);
+      // 결과 페이지로 이동하기 전에 선택한 이미지의 worldcup_choice_id 값을 URL 쿼리 파라미터로 추가하세요.
+      console.log(selectedImage);
+      navigate(`/results/${worldCupId}?worldcup_choice_id=${selectedImage.worldcup_choice_id}`, { state: { finalImage: selectedImage } }); // 변경된 부분!
+    }
   };
 
-  const goToResult = () => {
-    navigate('/result');
+  const getRoundImages = (round) => {
+    if (round === 0) {
+      return worldCup.worldcup.choices.slice(0, 2);
+    } else if (round === 1) {
+      return worldCup.worldcup.choices.slice(2, 4);
+    } else {
+      return selectedImages;
+    }
   };
+
+  if (!worldCup) {
+    return <div>Loading...</div>;
+  }
+
+  const roundImages = getRoundImages(round);
+
+  const roundNames = ["4강", "4강", "결승"]; // 라운드 이름 수정
 
   return (
     <Container>
+      <h1>{worldCup.title}</h1>
       <ProgressInfo>
-        <h1>{worldCupName}</h1>
-        <p>{`진행 사항: ${round}/${totalRounds}`}</p>
+        {worldCup.worldcup.choices
+          ? `${roundNames[round]}`
+          : "Loading..."}
       </ProgressInfo>
       <ImageContainer>
-        {roundImages.map((image) => (
+        {roundImages.map((choice, index) => (
           <ClickableImage
-            key={image.id}
-            src={image.src}
-            alt={image.name}
-            onClick={() => handleImageClick(image)}
+            key={index}
+            src={choice.choice_url}
+            alt={`round-${round}-image-${index}`}
+            onClick={() => handleImageClick(choice)}
           >
-            <ImageName>{image.name}</ImageName>
+            <ImageName>{choice.choice_name}</ImageName>
           </ClickableImage>
         ))}
       </ImageContainer>

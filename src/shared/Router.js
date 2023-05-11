@@ -17,8 +17,8 @@ export const Router = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/mypage" element={<Mypage />} />
-          <Route path="/play" element={<Play />} />
-          <Route path="/result" element={<Result />} />
+          <Route path="/play/:id" element={<Play />} />
+          <Route path="/results/:id" element={<Result />} /> {/* 변경된 부분! */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/worldcupcreate" element={<WorldCupCreate />} />

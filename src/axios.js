@@ -24,6 +24,7 @@ axios.interceptors.request.use(
     // 서버에서 헤더에 token 과 refreshToken 을 가져오는 로직
     const token = sessionStorage.getItem("token");
     const refreshtoken = sessionStorage.getItem("refreshtoken");
+    console.log(token);
 
     if (token) {
       config.headers["Authorization"] = token.trim();
