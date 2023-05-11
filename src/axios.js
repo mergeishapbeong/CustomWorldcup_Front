@@ -59,6 +59,10 @@ export function deleteAPI(url) {
   return axios.delete(API_BASE_URL + url);
 }
 
+export function patchAPI(url, data) {
+  console.log("PATCH Start, url : ", url, " user : ", data);
+  return axios.patch(API_BASE_URL + url, data);
+}
 // export function addWorldCupAPI(url, worldcup) {
 //   console.log("addWorldCupAPI Start, url : ", url, " worldcup : ", worldcup);
 //   return axios.post(API_BASE_URL + url, worldcup);

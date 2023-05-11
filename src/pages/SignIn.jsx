@@ -102,6 +102,11 @@ const LoginBtn = styled.button`
   background-color: #b9d7ea;
   border: 3px solid #b9d7ea;
   color: white;
+  &:hover {
+    background: #94aebf;
+    border: 3px solid #94aebf;
+    cursor: pointer;
+  }
 `;
 
 const AddBtn = styled.button`
@@ -111,4 +116,9 @@ const AddBtn = styled.button`
   background-color: #769fcd;
   border: 3px solid #769fcd;
   color: white;
+  &:hover {
+    background: #4c6684;
+    border: 3px solid #4c6684;
+    cursor: pointer;
+  }
 `;

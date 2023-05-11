@@ -27,7 +27,7 @@ export const Header = () => {
         <LogoDiv>
           <LogoATag
             onClick={() => {
-              navigate("/main");
+              navigate("/");
             }}
           >
             SWSchool
@@ -38,7 +38,7 @@ export const Header = () => {
             <LinkLi>
               <LinkATag
                 onClick={() => {
-                  navigate("/main");
+                  navigate("/");
                 }}
               >
                 이상형 월드컵
@@ -114,6 +114,7 @@ const LogoATag = styled.a`
   padding: 15px 25px;
   float: left;
   font-size: 18px;
+  font-weight: bold;
   line-height: 20px;
   cursor: pointer;
 `;
@@ -154,6 +155,9 @@ const LinkATag = styled.a`
   display: block;
   cursor: pointer;
   text-decoration: none;
+  &:hover {
+    color: #769fcd;
+  }
 `;
 
 const LoginUl = styled.ul`
@@ -161,11 +165,17 @@ const LoginUl = styled.ul`
   float: left;
   margin: 0;
   list-style: none;
+  &:hover {
+    color: #769fcd;
+  }
 `;
 
 const LoginLi = styled.li`
   display: inline-block;
   position: relative;
+  &:hover {
+    color: #769fcd;
+  }
 `;
 
 const LoginATag = styled.a`
@@ -177,4 +187,7 @@ const LoginATag = styled.a`
   display: block;
   cursor: pointer;
   text-decoration: none;
+  &:hover {
+    color: #769fcd;
+  }
 `;

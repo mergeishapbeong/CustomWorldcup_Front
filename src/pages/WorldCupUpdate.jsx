@@ -1,85 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
-import { postAPI } from "../axios";
+import { getAPI, patchAPI } from "../axios";
+import { useParams } from "react-router-dom";
 
-const WorldCupCreate = () => {
+const WorldCupUpdate = () => {
+  const { id } = useParams();
+  // console.log("id ::: ", id);
+
+  const [worldcupModifed, setWorldCupModifed] = useState([]);
+
+  // TODO 1. useEffect로 월드컴 상세 조회하는 GET API 호출 -> id를 이용해서 조회.
+  useEffect(() => {
+    getAPI(`/api/worldcup/${id}`).then((data) => {
+      if (data.status === 200) {
+        console.log("data.data.results :: ", data.data.worldcup);
+        setWorldCupModifed(data.data.worldcup);
+      }
+    });
+  }, [id]);
+
+  // TODO 2. const 변수에 담아
+  const worldcup = {
+    worldcup_id: worldcupModifed.worldcup_id,
+  };
+
+  // console.log('worldcup :: ', worldcup)
+
+  // TODO 3. 아래에 그 데이터를 뿌려줘 -> input value={worldcup.title}
+  // worldcup에서 파일 꺼내와서 아래 files 로 원래 보여줬던 부분에 넣기
+
   // 여기에 필요한 함수나 변수를 선언하는 공간
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [choice_name, setChoice_Name] = useState("");
-  const [choice_url, setChoice_Url] = useState("");
 
   // validation 함수
   const validation = () => {
-    let urlExp =
-      /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
-    if (!urlExp.test(choice_url)) {
-      alert("올바른 URL을 입력하세요");
-      return false;
-    }
-    return true;
+    // TODO 회원가입할때 하는 빈값 체크 validation 추가
   };
-
-  // 이미지 저장소
-  const [files, setFiles] = useState([]);
 
   // 월드컵 제목
   const handleChange_title = (e) => {
     setTitle(e.target.value);
+    setWorldCupModifed({
+      ...worldcupModifed,
+      title: e.target.value,
+    });
   };
 
   // 월드컵 설명
   const handleChange_content = (e) => {
     setContent(e.target.value);
+    setWorldCupModifed({
+      ...worldcupModifed,
+      content: e.target.value,
+    });
   };
 
-  // 이미지 제목
-  const handleChange_choicename = (e) => {
-    setChoice_Name(e.target.value);
-  };
-
-  // 이미지 url
-  const handleChange_choiceurl = (e) => {
-    setChoice_Url(e.target.value);
-  };
-
-  // 이미지 추가 버튼
-  const clickAddButtonHandler = (e) => {
-    e.preventDefault();
-
-    if (validation()) {
-      const newimg = {
-        choice_name,
-        choice_url,
-      };
-
-      setFiles([...files, newimg]);
-      setChoice_Name("");
-      setChoice_Url("");
-    }
-  };
-
-  // 저장 버튼
-  const worldCupAddHandler = (e) => {
+  // 수정 버튼
+  const worldCupModifedHandler = (e) => {
     e.preventDefault();
 
     const worldCup = {
-      title,
-      content,
-      choices: files,
+      title: worldcupModifed.title,
+      content: worldcupModifed.content,
     };
 
-    if (files.length < 2) {
-      alert("이미지를 2개 이상 저장해주세요");
-      return false;
-    }
+    // TODO 1. axios 파일에 patch 만들기
+    // TODO 2. api 호출해서 연동
 
-    postAPI("/api/worldcup", worldCup)
+    // /api/worldcup/119
+    patchAPI(`/api/worldcup/${worldcup.worldcup_id}`, worldCup)
       .then(() => {
-        alert("게시물이 생성되었습니다");
-        document.location.href = "/";
+        alert("게시물이 수정이 완료되었습니다.");
+        document.location.href = "/mypage";
       })
       .catch((e) => console.log("e :: ", e));
   };
@@ -95,7 +89,11 @@ const WorldCupCreate = () => {
             <InputBox>
               <InputLabel>제목</InputLabel>
               <InputText>
-                <Input type="text" onChange={handleChange_title} />
+                <Input
+                  type="text"
+                  onChange={handleChange_title}
+                  value={worldcupModifed.title || ""}
+                />
                 <InputSpan>
                   이상형 월드컵의 제목을 입력하세요. 예) 고양이 월드컵, 강아지
                   월드컵
@@ -106,7 +104,11 @@ const WorldCupCreate = () => {
             <InputBox>
               <InputLabel>내용</InputLabel>
               <InputText>
-                <Input type="text" onChange={handleChange_content} />
+                <Input
+                  type="text"
+                  onChange={handleChange_content}
+                  value={worldcupModifed.content || ""}
+                />
                 <InputSpan>설명, 하고싶은 말 등을 자유롭게 쓰세요.</InputSpan>
               </InputText>
             </InputBox>
@@ -115,10 +117,10 @@ const WorldCupCreate = () => {
             <ImgBox>
               <ImgDiv>
                 <PageNameDiv>
-                  <PageNameHTag>이상형 월드컵 이미지 업로드</PageNameHTag>
+                  <PageNameHTag>이미지는 수정이 불가능합니다.</PageNameHTag>
                 </PageNameDiv>
                 <ImgInputDiv>
-                  <InputImgBox>
+                  {/* <InputImgBox>
                     <InputLabel>이미지 제목</InputLabel>
                     <InputText>
                       <Input
@@ -139,58 +141,31 @@ const WorldCupCreate = () => {
                       />
                       <InputSpan>이미지 url을 입력하세요.</InputSpan>
                     </InputText>
-                  </InputImgBox>
-                  <InputImgBox>
-                    <InputLabels>이미지 저장</InputLabels>
-                    <ImgTextBox>
-                      <ImgStore>
-                        {files.map((d, index) => (
-                          <p
-                            key={index}
-                            style={{
-                              marginLeft: "10px",
-                            }}
-                          >
-                            {d.choice_name},
-                          </p>
-                        ))}
-                      </ImgStore>
-                      <InputSpan>
-                        이미지 저장공간 (4장만 저장할 수 있습니다)
-                      </InputSpan>
-                      <Button clickAddButtonHandler={clickAddButtonHandler}>
+                  </InputImgBox> */}
+                  {/* <InputImgBox>
+                          <InputLabels>이미지</InputLabels>
+                          <ImgTextBox>
+                            <ImgStore></ImgStore> */}
+                  {/* <InputSpan> */}
+                  {/* 이미지 저장공간 (4장만 저장할 수 있습니다) */}
+                  {/* </InputSpan> */}
+                  {/* <Button clickAddButtonHandler={clickAddButtonHandler}>
                         추가
-                      </Button>
-                    </ImgTextBox>
-                  </InputImgBox>
-
-                  {/* TODO 추후에 파일선택으로 변경 예정 
-                  <ImgFormContent>
-                    <ImgForm>
-                      <ImgFormText>
-                        <input type="file" />
-                        <span>
-                          <strong>
-                            Drop files here or click to upload.
-                            <br />
-                            여기 파일을 놓거나 클릭하여 업로드하세요.
-                          </strong>
-                        </span>
-                      </ImgFormText>
-                    </ImgForm>
-                  </ImgFormContent> */}
+                      </Button> */}
+                  {/* </ImgTextBox>
+                        </InputImgBox> */}
                 </ImgInputDiv>
               </ImgDiv>
             </ImgBox>
           </ImgContent>
-          <StoreBtn onClick={worldCupAddHandler}>저장하기</StoreBtn>
+          <StoreBtn onClick={worldCupModifedHandler}>수정하기</StoreBtn>
         </form>
       </ContentDiv>
     </Container>
   );
 };
 
-export default WorldCupCreate;
+export default WorldCupUpdate;
 
 const Container = styled.div`
   width: 100%;
