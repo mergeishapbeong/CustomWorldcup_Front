@@ -34,7 +34,7 @@ const Result = () => {
       }
       const token = sessionStorage.getItem("token");
       const refreshToken = sessionStorage.getItem("refreshToken");
-      console.log(worldcup_choice_id);
+      // console.log(worldcup_choice_id);
 
       try {
         const responseResult = await axios.get(
@@ -46,20 +46,33 @@ const Result = () => {
             },
           }
         );
-        console.log(responseResult);
+        // console.log("responseResult ::", responseResult);
 
         if (responseResult.status === 200) {
           const resultData = responseResult.data;
-          console.log("Result data: ", resultData);
+          // console.log("Result data: ", resultData.worldcupResult);
           setFinalImage({
-            name: resultData.choice_name,
-            url: resultData.choice_url,
+            name: resultData.worldcupResult.choice_name,
+            url: resultData.worldcupResult.choice_url,
           });
-          const sortedResultData = resultData.result.sort(
-            (a, b) => b.win_count - a.win_count
+          // const sortedResultData = resultData.result.sort(
+          //   (a, b) => b.win_count - a.win_count
+          // );
+          // setRanking(sortedResultData);
+          // console.log("Sorted result data: ", sortedResultData);
+
+          // 댓글 조회
+          const commentResponse = await axios.get(
+            `${API_BASE_URL}/worldcup/${id}/comments`,
+            {
+              headers: {
+                Authorization: `${token}`,
+                refreshtoken: `${refreshToken}`,
+              },
+            }
           );
-          setRanking(sortedResultData);
-          console.log("Sorted result data: ", sortedResultData);
+
+          console.log("commentResponse :: ", commentResponse);
         } else {
           console.error(
             `Error fetching result: ${responseResult.status} ${responseResult.statusText}`
@@ -70,11 +83,11 @@ const Result = () => {
         console.error("Error fetching result: ", error);
       }
     };
-          // const rankingData = resultData.result.map((item) => ({
-          //   choice_url: item.choice_url,
-          //   choice_name: item.choice_name,
-          //   win_count: item.win_count,
-          // }));
+    // const rankingData = resultData.result.map((item) => ({
+    //   choice_url: item.choice_url,
+    //   choice_name: item.choice_name,
+    //   win_count: item.win_count,
+    // }));
 
     fetchData();
   }, [id, worldcup_choice_id]);
@@ -86,7 +99,7 @@ const Result = () => {
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const userNickname = "사용자 닉네임";
+  const userNickname = "익명";
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
@@ -111,6 +124,8 @@ const Result = () => {
     console.log("ranking updated: ", ranking);
   }, [ranking]);
 
+  // console.log("finalImage :: ", finalImage);
+  // console.log("comments ::", comments);
   return (
     <Container>
       <h1>결과</h1>

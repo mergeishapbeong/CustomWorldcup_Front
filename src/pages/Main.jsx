@@ -95,15 +95,25 @@ const WorldCupCard = ({ worldCup }) => {
       <ImageContainer>
         {choices && choices.length >= 2 ? (
           <>
-            <Image src={choices[0].choice_url} alt={choices[0].choice_name} />
-            <Image src={choices[1].choice_url} alt={choices[1].choice_name} />
+            <Image
+              src={choices[0].choice_url}
+              alt={choices[0].choice_name}
+              style={{ width: "50%" }}
+            />
+            <Image
+              src={choices[1].choice_url}
+              alt={choices[1].choice_name}
+              style={{ width: "50%" }}
+            />
           </>
         ) : (
           <Empty />
         )}
       </ImageContainer>
-      <Title>{title}</Title>
-      <Description>{content}</Description>
+      <NameContent>
+        <Title>{title}</Title>
+        <Description>{content}</Description>
+      </NameContent>
       <ButtonContainer>
         <LeftButtons>
           <Link to={`/play/${worldCup.worldcup_id}`}>
@@ -134,6 +144,7 @@ export default Main;
 
 // Styled components
 const Container = styled.div`
+  height: 1000px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -158,16 +169,16 @@ const WorldCupGrid = styled.div`
 `;
 
 const Card = styled.div`
-  position: relative;
-  width: 100%;
-  background: #b9d7ea;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px; // 패딩을 15px로 변경
-  box-sizing: border-box;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 270px;
+  background-color: white;
+  margin: 20px 20px;
+  text-align: right;
+  border: 1px solid #d6e6f2;
+  border-radius: 3px;
+  &:hover {
+    border: 1px solid #4690e4;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -179,20 +190,29 @@ const ImageContainer = styled.div`
 
 const Image = styled.img`
   width: 200px; // 이미지 크기
-  height: 200px; // 이미지 크기
+  height: 150px; // 이미지 크기
   object-fit: cover;
 `;
 
-const Title = styled.h3`
-  margin: 0;
-  margin-bottom: 5px;
+const Title = styled.div`
+  width: 100%;
+  height: 32px;
   font-size: 18px;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 5px;
+  &:hover {
+    color: #769fcd;
+  }
 `;
 
-const Description = styled.p`
-  margin: 0;
-  margin-bottom: 10px;
+const Description = styled.div`
+  width: 100%;
+  height: 28px;
   font-size: 14px;
+  text-align: left;
+  padding: 5px;
+  box-sizing: border-box;
 `;
 
 const ButtonContainer = styled.div`
@@ -218,15 +238,40 @@ const SortButton = styled.button`
 `;
 
 const PlayButton = styled(SortButton)`
+  width: 100px;
+  height: 35px;
+  background-color: white;
+  border: 1px solid #769fcd;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #769fcd;
+  opacity: 1;
+  transition: 0.5s;
   &:hover {
-    background-color: #5885b8;
+    cursor: pointer;
+    background-color: #769fcd;
+    color: white;
+    font-weight: bold;
+    opacity: 1;
   }
-  margin-right: auto;
 `;
 
 const ResultButton = styled(SortButton)`
+  width: 100px;
+  height: 35px;
+  background-color: white;
+  border: 1px solid #769fcd;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #769fcd;
+  opacity: 1;
+  transition: 0.5s;
   &:hover {
-    background-color: #5885b8;
+    cursor: pointer;
+    background-color: #769fcd;
+    color: white;
+    font-weight: bold;
+    opacity: 1;
   }
 `;
 
@@ -235,6 +280,11 @@ const Likes = styled.span`
   color: #5885b8;
   display: flex;
   align-items: center;
+  margin-top: 15px;
+  margin-right: 15px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
@@ -250,6 +300,8 @@ const Empty = styled.div`
 
 const LeftButtons = styled.div`
   display: flex;
+  margin-top: 15px;
+  margin-left: 15px;
   gap: 10px; // 버튼 사이의 간격 추가
 `;
 
@@ -259,4 +311,9 @@ const LikeWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+`;
+
+const NameContent = styled.div`
+  height: 50px;
+  width: 100%;
 `;
