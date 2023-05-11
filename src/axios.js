@@ -24,7 +24,6 @@ axios.interceptors.request.use(
     // 서버에서 헤더에 token 과 refreshToken 을 가져오는 로직
     const token = sessionStorage.getItem("token");
     const refreshtoken = sessionStorage.getItem("refreshtoken");
-    console.log(token);
 
     if (token) {
       config.headers["Authorization"] = token.trim();
@@ -59,7 +58,36 @@ export function deleteAPI(url) {
   return axios.delete(API_BASE_URL + url);
 }
 
+export function patchAPI(url, data) {
+  console.log("PATCH Start, url : ", url, " user : ", data);
+  return axios.patch(API_BASE_URL + url, data);
+}
 // export function addWorldCupAPI(url, worldcup) {
 //   console.log("addWorldCupAPI Start, url : ", url, " worldcup : ", worldcup);
 //   return axios.post(API_BASE_URL + url, worldcup);
 // }
+
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = sessionStorage.getItem("refreshToken");
+      try {
+        const res = await axios.post(API_BASE_URL + "/token/refresh/", {
+          refresh: refreshToken,
+        });
+        sessionStorage.setItem("token", res.data.access);
+        originalRequest.headers["Authorization"] = "Bearer " + res.data.access;
+        return axios(originalRequest);
+      } catch (err) {
+        console.error("Failed to refresh access token:", err);
+        // 추가적인 처리가 필요한 경우 이곳에 작성하세요.
+      }
+    }
+    return Promise.reject(error);
+  }
+);

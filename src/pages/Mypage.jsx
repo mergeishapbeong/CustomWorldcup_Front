@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { deleteAPI, getAPI } from "../axios";
+import { Link } from "react-router-dom";
 
 function Mypage() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function Mypage() {
   useEffect(() => {
     getAPI("/api/mypage/worldcup").then((data) => {
       if (data.status === 200) {
+        console.log("data.data.results :: ", data.data.results);
         setWorldCupList(data.data.results);
       }
     });
@@ -26,6 +28,8 @@ function Mypage() {
       });
   };
 
+  console.log("worldcupLists ::", worldcupList);
+
   return (
     <Container>
       <TextDiv>
@@ -33,25 +37,25 @@ function Mypage() {
       </TextDiv>
       <ContentDiv>
         <ContentBox>
-          {worldcupList.map((worldCup) => {
+          {worldcupList.map((worldCup, index) => {
             return (
-              <Content>
+              <Content key={index}>
                 <ImgDiv>
-                  {worldCup.Worldcup_choices.map((w) => {
+                  {worldCup.Worldcup_choices.map((w, index) => {
                     return (
-                      <img src={w.choice_url} style={{ width: "50%" }}></img>
+                      <img
+                        src={w.choice_url}
+                        style={{ width: "50%" }}
+                        key={index}
+                      ></img>
                     );
                   })}
                 </ImgDiv>
                 <ContentName>{worldCup.title}</ContentName>
                 <ContentText>{worldCup.content}</ContentText>
-                <ContentBtn
-                  onClick={() => {
-                    navigate("/worldcupcreate");
-                  }}
-                >
-                  수정하기
-                </ContentBtn>
+                <Link to={`/worldcupupdate/${worldCup.worldcup_id}`}>
+                  <ContentBtn>수정하기</ContentBtn>
+                </Link>
                 <ContentBtn
                   onClick={() => {
                     handleDelete(worldCup.worldcup_id);
