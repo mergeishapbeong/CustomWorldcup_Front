@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Button from "../components/Button";
-import { postAPI } from "../axios";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Button from '../components/Button';
+import { postAPI } from '../axios';
 
 const WorldCupCreate = () => {
   // 여기에 필요한 함수나 변수를 선언하는 공간
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [choice_name, setChoice_Name] = useState("");
-  const [choice_url, setChoice_Url] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [choice_name, setChoice_Name] = useState('');
+  const [choice_url, setChoice_Url] = useState('');
 
   // validation 함수
   const validation = () => {
@@ -16,7 +16,7 @@ const WorldCupCreate = () => {
       /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
     if (!urlExp.test(choice_url)) {
-      alert("올바른 URL을 입력하세요");
+      alert('올바른 URL을 입력하세요');
       return false;
     }
     return true;
@@ -56,8 +56,8 @@ const WorldCupCreate = () => {
       };
 
       setFiles([...files, newimg]);
-      setChoice_Name("");
-      setChoice_Url("");
+      setChoice_Name('');
+      setChoice_Url('');
     }
   };
 
@@ -72,16 +72,16 @@ const WorldCupCreate = () => {
     };
 
     if (files.length < 2) {
-      alert("이미지를 2개 이상 저장해주세요");
+      alert('이미지를 2개 이상 저장해주세요');
       return false;
     }
 
-    postAPI("/api/worldcup", worldCup)
+    postAPI('/api/worldcup', worldCup)
       .then(() => {
-        alert("게시물이 생성되었습니다");
-        document.location.href = "/";
+        alert('게시물이 생성되었습니다');
+        document.location.href = '/';
       })
-      .catch((e) => console.log("e :: ", e));
+      .catch((e) => console.log('e :: ', e));
   };
 
   return (
@@ -97,7 +97,7 @@ const WorldCupCreate = () => {
               <InputText>
                 <Input type="text" onChange={handleChange_title} />
                 <InputSpan>
-                  이상형 월드컵의 제목을 입력하세요. 예) 고양이 월드컵, 강아지
+                  이상형 월드컵의 제목을 입력하세요 예) 고양이 월드컵, 강아지
                   월드컵
                 </InputSpan>
               </InputText>
@@ -148,7 +148,7 @@ const WorldCupCreate = () => {
                           <p
                             key={index}
                             style={{
-                              marginLeft: "10px",
+                              marginLeft: '10px',
                             }}
                           >
                             {d.choice_name},
