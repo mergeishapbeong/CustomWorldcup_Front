@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { deleteAPI, getAPI } from "../axios";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { deleteAPI, getAPI } from '../axios';
+import { Link } from 'react-router-dom';
 
 function Mypage() {
   const navigate = useNavigate();
   const [worldcupList, setWorldCupList] = useState([]);
 
   useEffect(() => {
-    getAPI("/api/mypage/worldcup").then((data) => {
+    getAPI('/api/mypage/worldcup').then((data) => {
       if (data.status === 200) {
-        console.log("data.data.results :: ", data.data.results);
+        console.log('data.data.results :: ', data.data.results);
         setWorldCupList(data.data.results);
       }
     });
@@ -20,15 +20,15 @@ function Mypage() {
   const handleDelete = (id) => {
     deleteAPI(`/api/worldcup/${id}`)
       .then(() => {
-        alert("삭제가 완료되었습니다.");
-        document.location.href = "/mypage";
+        alert('삭제가 완료되었습니다.');
+        document.location.href = '/mypage';
       })
       .catch(() => {
-        alert("삭제를 실패했습니다.");
+        alert('삭제를 실패했습니다.');
       });
   };
 
-  console.log("worldcupLists ::", worldcupList);
+  console.log('worldcupLists ::', worldcupList);
 
   return (
     <Container>
@@ -45,7 +45,7 @@ function Mypage() {
                     return (
                       <img
                         src={w.choice_url}
-                        style={{ width: "50%" }}
+                        style={{ width: '50%' }}
                         key={index}
                       ></img>
                     );
